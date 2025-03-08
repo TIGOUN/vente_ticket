@@ -44,9 +44,8 @@
          </li>
 
          <li class="side-nav-item">
-             <a wire:navigate href="{{ route('dashboard') }}" class="side-nav-link">
-                 <i class="uil-home-alt"></i>
-                 <span class="badge bg-success float-end">4</span>
+             <a wire:navigate href="{{ route('events') }}" class="side-nav-link">
+                 <i class="uil-store"></i>
                  <span> Evernements </span>
              </a>
          </li>
