@@ -9,7 +9,7 @@ use Livewire\WithFileUploads;
 class EventComponent extends Component
 {
     use WithFileUploads;
-    public $showCreateEventComponent = false;
+    public $showCreateEventForm = false;
 
     public $eventId;
     public $code;
@@ -94,11 +94,11 @@ class EventComponent extends Component
 
     public function showingCreateEventComponent()
     {
-        $this->showCreateEventComponent = !$this->showCreateEventComponent;
+        $this->showCreateEventForm = !$this->showCreateEventForm;
     }
 
     public function render()
     {
-        return view('livewire.events.event-component', ['events' => Event::latest()->get()]);
+        return view('livewire.events.event-component');
     }
 }

@@ -22,7 +22,7 @@
         </div>
         <div class="col-sm-5">
             <div class="text-sm-end">
-                @if ($showCreateEventComponent)
+                @if ($showCreateEventForm)
                 <a href="#" class="btn btn-danger mb-2" wire:click="showingCreateEventComponent">
                     <i class="mdi mdi-close-circle me-2"></i>
                     Fermer
