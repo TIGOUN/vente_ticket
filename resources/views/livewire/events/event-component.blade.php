@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    @if ($showCreateEventComponent)
+    @if ($showCreateEventForm)
     <div class="row">
         <div class="col-12">
             <div class="card">

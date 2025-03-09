@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Dashbords\StarterPage;
 use App\Livewire\Events\EventComponent;
+use App\Livewire\Scanners\ScannerComponent;
 use App\Livewire\Tickets\TicketComponent;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ Route::get('/dashboard', StarterPage::class)->middleware(['auth', 'verified'])->
 Route::middleware('auth')->group(function () {
     Route::get('/events', EventComponent::class)->name('events');
     Route::get('/tickets', TicketComponent::class)->name('tickets');
+    Route::get('/scanners', ScannerComponent::class)->name('scanners');
 });
 
 Route::middleware('auth')->group(function () {

@@ -20,6 +20,8 @@
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
     <link href="{{ asset('assets/sweetalertjs/sweetalert2.min.css') }}" rel="stylesheet">
+
+    <link rel="manifest" href="/manifest.json">
     @livewireStyles
 </head>
 
@@ -183,6 +185,23 @@
     <!-- demo app -->
     <script src="{{ asset('assets/js/pages/demo.dashboard.js') }}"></script>
     <script src="{{ asset('assets/sweetalertjs/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('service-worker.js') }}"></script>
+
+    <script>
+    // Si le service worker est disponible dans le navigateur
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker enregistré avec succès:', registration);
+                })
+                .catch((error) => {
+                    console.log('Échec de l\'enregistrement du Service Worker:', error);
+                });
+        });
+    }
+    </script>
     <!-- end demo js-->
     @livewireScripts
 </body>

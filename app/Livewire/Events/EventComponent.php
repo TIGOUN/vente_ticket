@@ -25,6 +25,8 @@ class EventComponent extends Component
     public $branding_image;
     public $branding_image_url;
 
+    public $events;
+
     protected $rules = [
         // 'code' => 'required|string|max:255',
         'name' => 'required|string|max:255',
@@ -42,6 +44,7 @@ class EventComponent extends Component
     public function mount($eventId = null)
     {
         $this->code = generateUniqueReference();
+        $this->events = Event::latest()->get();
         // if ($eventId) {
         //     $event = Event::findOrFail($eventId);
         //     $this->eventId = $event->id;
