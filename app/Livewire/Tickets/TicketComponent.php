@@ -4,12 +4,13 @@ namespace App\Livewire\Tickets;
 
 use App\Models\Event;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
 class TicketComponent extends Component
 {
-    public $showCreateTicketForm, $numberTicket, $eventId, $events;
+    public $showCreateTicketForm, $numberTicket, $eventId, $events, $tickets;
 
     public function showingCreateTicketComponent()
     {
@@ -20,6 +21,7 @@ class TicketComponent extends Component
     public function mount()
     {
         $this->events = Event::latest()->get();
+        $this->tickets = Ticket::latest()->get();
     }
 
     // Définir les règles de validation
@@ -36,25 +38,28 @@ class TicketComponent extends Component
         // TODO: Implement ticket creation logic here
         // 1- Validation du formulaire
         $this->validate();
-        // dd(env('APP_QR_CODE_KEY'));
+
         // 2- Sauvegarde des données du ticket dans la base de données
-        $ticket = new Ticket();
-        $ticket->id = Str::uuid(); // Génération d'un UUID sécurisé
-        $ticket->event_id = $this->eventId;
+        for ($i = 0; $i < $this->numberTicket; $i++) // Création du nombre de tickets demandé
+        {
+            $ticket = new Ticket();
+            $ticket->id = Str::uuid(); // Génération d'un UUID sécurisé
+            $ticket->event_id = $this->eventId;
 
-        // Données sensibles du ticket (ex: nom du participant, email, etc.)
-        $data = [
-            'name' => 'Jean Dupont',
-            'email' => 'jean.dupont@example.com',
-            'seat' => 'A12'
-        ];
+            // Données sensibles du ticket (ex: nom du participant, email, etc.)
+            $data = [
+                'name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'timeAt' => now()
+            ];
 
-        // Chiffrement des données
-        $ticket->encryptData($data);
-        $ticket->save();
+            // Chiffrement des données
+            $ticket->encryptData($data);
+            $ticket->save();
+        }
 
         // 3- Affichage d'un message de confirmation
-
+        return redirect()->route('tickets');
     }
 
     public function render()

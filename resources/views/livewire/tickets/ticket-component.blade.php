@@ -94,15 +94,32 @@
                                     </th>
 
                                     <th>Code</th>
-                                    <th>Nom</th>
-                                    <th>Date début</th>
-                                    <th>Date fin</th>
-                                    <th>Lieu</th>
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($tickets as $ticket)
+                                <tr wire:key="{{ $ticket->id }}">
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                                            <label class="form-check-label" for="customCheck2">&nbsp;</label>
+                                        </div>
+                                    </td>
 
+                                    <td>
+                                        @if ($ticket->qr_code)
+                                        <img src="{{ Storage::url($ticket->qr_code) }}" alt="QR Code du ticket">
+                                        <br>
+                                        <a href="{{ Storage::url($ticket->qr_code) }}"
+                                            download="ticket_{{ $ticket->id }}.png">
+                                            Télécharger le QR Code
+                                        </a>
+                                        @endif
+                                    </td>
+
+                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
