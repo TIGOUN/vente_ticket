@@ -11,7 +11,7 @@ class ScannerComponent extends Component
 
     public function processScan($data)
     {
-        $this->scannedData = $data; // Met à jour la valeur scannée
+        $this->scannedData = $data;
     }
 
     public function render()

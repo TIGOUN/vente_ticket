@@ -137,6 +137,7 @@
                                     <th>Date début</th>
                                     <th>Date fin</th>
                                     <th>Lieu</th>
+                                    <th>Crée par</th>
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -163,6 +164,9 @@
                                     </td>
                                     <td>
                                         {{ $event->location }}
+                                    </td>
+                                    <td>
+                                        {{ $event->user->name }}
                                     </td>
                                     <td>
                                         -

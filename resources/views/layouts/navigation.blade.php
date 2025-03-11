@@ -57,6 +57,13 @@
              </a>
          </li>
 
+         <li class="side-nav-item">
+             <a wire:navigate href="{{ route('scanners') }}" class="side-nav-link">
+                 <i class="uil-store"></i>
+                 <span> Scanner </span>
+             </a>
+         </li>
+
      </ul>
  </div>
  <!-- Left Sidebar End -->

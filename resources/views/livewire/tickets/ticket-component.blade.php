@@ -94,6 +94,11 @@
                                     </th>
 
                                     <th>Code</th>
+                                    <th>QRCode</th>
+                                    <th>Statut</th>
+                                    <th>Mail</th>
+                                    <th>Scanner par</th>
+                                    <th>Générer par</th>
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -108,8 +113,13 @@
                                     </td>
 
                                     <td>
+                                        {{ $ticket->code }}
+                                    </td>
+
+                                    <td>
                                         @if ($ticket->qr_code)
-                                        <img src="{{ Storage::url($ticket->qr_code) }}" alt="QR Code du ticket">
+                                        <img src="{{ Storage::url($ticket->qr_code) }}" alt="QR Code du ticket"
+                                            style="width: 150px;">
                                         <br>
                                         <a href="{{ Storage::url($ticket->qr_code) }}"
                                             download="ticket_{{ $ticket->id }}.png">
@@ -118,6 +128,33 @@
                                         @endif
                                     </td>
 
+                                    <td>
+                                        @if ($ticket->is_used)
+                                        <span class="badge badge-outline-success">
+                                            Présent
+                                        </span>
+                                        @else
+                                        <span class="badge badge-outline-danger">
+                                            Absent
+                                        </span>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        {{ $ticket->email ?? '-' }}
+                                    </td>
+
+                                    <td>
+                                        {{ $ticket?->user_scanner?->name ?? '-' }}
+                                    </td>
+
+                                    <td>
+                                        {{ $ticket->user->name }}
+                                    </td>
+
+                                    <td>
+                                        -
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

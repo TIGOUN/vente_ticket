@@ -21,7 +21,6 @@
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
     <link href="{{ asset('assets/sweetalertjs/sweetalert2.min.css') }}" rel="stylesheet">
 
-    <link rel="manifest" href="/manifest.json">
     @livewireStyles
 </head>
 

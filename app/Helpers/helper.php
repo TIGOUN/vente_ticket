@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -28,5 +29,29 @@ if (!function_exists('generateUniqueReference')) {
             $exists = DB::table('events')->where('code', $reference)->exists();
         } while ($exists);
         return $reference;
+    }
+}
+
+
+if (!function_exists('generateCodeTicket')) {
+    function generateCodeTicket()
+    {
+        $anneeActuelle = substr(date('Y'), -2);
+        $codePrefixe = 'TKT-FAST' . $anneeActuelle . '-';
+
+        $dernierCode = Ticket::where('code', 'LIKE', 'TKT-FAST' . $anneeActuelle . '-%')
+            ->orderBy('code', 'desc')
+            ->first();
+
+        if ($dernierCode) {
+            $dernierNumero = intval(substr($dernierCode->code, -4));
+            $nouveauNumero = $dernierNumero + 1;
+        } else {
+            $nouveauNumero = 1;
+        }
+
+        $nouveauNumero = str_pad($nouveauNumero, 4, '0', STR_PAD_LEFT);
+        $codeFinal = $codePrefixe . $nouveauNumero;
+        return $codeFinal;
     }
 }

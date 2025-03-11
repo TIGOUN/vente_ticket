@@ -1,14 +1,45 @@
 <div class="text-center">
     <h3>Scanner un Ticket</h3>
 
-    <button id="startScanner">Démarrer le scan</button>
+    <button id="startScanner" class="btn btn-success text-start">Démarrer le scan</button>
 
-    <video id="scannerVideo" width="100%" height="auto" style="border: 1px solid #ddd;"></video>
-    <p>Résultat : <strong id="scannedData">@if($scannedData) {{ $scannedData }} @endif</strong></p>
+    <video id="scannerVideo" width="100%" height="auto" style="border: 1px solid #ddd; margin-top: 15px;"></video>
+
+    @if ($scannedData)
+    {{ $scannedData }}
+    @endif
+    <!-- <div class="modal fade" id="scrollable-modal-show-details" tabindex="-1" role="dialog"
+        aria-labelledby="scrollableModalTitle1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Hi !!!
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="modal fade" id="scrollable-modal-show-details" tabindex="-1" role="dialog"
+        aria-labelledby="scrollableModalTitle1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scrollableModalTitle1">
+                        Text
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    Hi !!!
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Instascan CDN -->
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/cam/instascan.min.js') }}"></script>
+    <script src="{{ asset('assets/cam/jquery.min.js') }}"></script>
 
     <script>
     $(document).ready(function() {
@@ -37,10 +68,38 @@
                     if (backCamera) {
                         scanner.start(backCamera); // Démarrer avec la caméra arrière
                     } else {
-                        alert('Aucune caméra arrière détectée');
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "danger",
+                            title: "Oups !!! Aucune caméra arrière détectée."
+                        });
                     }
                 } else {
-                    alert('Aucune caméra détectée');
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "danger",
+                        title: "Oups !!! Aucune caméra détectée."
+                    });
                 }
             }).catch(function(e) {
                 console.error(e);
@@ -50,6 +109,22 @@
         scanner.addListener('scan', function(content) {
             $('#scannedData').text(content); // Met à jour l'affichage du contenu scanné
             Livewire.dispatch('processScan', content); // Envoie à Livewire
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Scanner avec succès !!!"
+            });
         });
     });
     </script>

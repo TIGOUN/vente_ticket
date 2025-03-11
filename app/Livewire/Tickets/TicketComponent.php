@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Tickets;
 
-use App\Models\Event;
+use App\Models\Events;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -20,7 +20,7 @@ class TicketComponent extends Component
     // Récupérer les événements pour le formulaire
     public function mount()
     {
-        $this->events = Event::latest()->get();
+        $this->events = Events::latest()->get();
         $this->tickets = Ticket::latest()->get();
     }
 
@@ -45,6 +45,8 @@ class TicketComponent extends Component
             $ticket = new Ticket();
             $ticket->id = Str::uuid(); // Génération d'un UUID sécurisé
             $ticket->event_id = $this->eventId;
+            $ticket->user_id = Auth::user()->id;
+            $ticket->code = generateCodeTicket();
 
             // Données sensibles du ticket (ex: nom du participant, email, etc.)
             $data = [

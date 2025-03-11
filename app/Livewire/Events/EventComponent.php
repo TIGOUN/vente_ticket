@@ -2,7 +2,8 @@
 
 namespace App\Livewire\Events;
 
-use App\Models\Event;
+use App\Models\Events;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -44,7 +45,7 @@ class EventComponent extends Component
     public function mount($eventId = null)
     {
         $this->code = generateUniqueReference();
-        $this->events = Event::latest()->get();
+        $this->events = Events::latest()->get();
         // if ($eventId) {
         //     $event = Event::findOrFail($eventId);
         //     $this->eventId = $event->id;
@@ -73,6 +74,7 @@ class EventComponent extends Component
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,
+            'user_id' => Auth::user()->id,
             // 'total_tickets_expired' => $this->total_tickets_expired,
             // 'total_tickets_scanned' => $this->total_tickets_scanned,
             // 'total_tickets' => $this->total_tickets,
@@ -88,7 +90,7 @@ class EventComponent extends Component
         //     $event = Event::findOrFail($this->eventId);
         //     $event->update($eventData);
         // } else {
-        Event::create($eventData);
+        Events::create($eventData);
         // }
 
         // session()->flash('message', 'L\'événement a été enregistré avec succès!');

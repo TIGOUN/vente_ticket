@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Event extends Model
+class Events extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -27,6 +27,7 @@ class Event extends Model
         'total_tickets',
         'sold_tickets',
         'branding_image',
+        'user_id',
     ];
 
     protected static function boot()
@@ -37,8 +38,13 @@ class Event extends Model
         });
     }
 
-    // public function tickets()
-    // {
-    //     return $this->hasMany(Ticket::class, 'event_id');
-    // }
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'event_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

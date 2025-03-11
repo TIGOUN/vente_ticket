@@ -14,11 +14,16 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->uuid('id')->primary(); // ID en UUID pour plus de sécurité
             $table->uuid('event_id'); // L'événement auquel appartient le ticket
+            $table->string('code'); // Code du ticket
             $table->string('signature'); // Stocke la signature du QR Code
             $table->string('qr_code')->nullable(); // Stocke le chemin du fichier QR Code
             $table->longText('encrypted_data'); // Données cryptées (nom, email, etc.)
             $table->string('email')->nullable();
             $table->boolean('is_used')->default(false); // Indique si le ticket a été scanné
+            $table->unsignedBigInteger('user_id')->comment('Créateur du ticket');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('scanner_id')->nullable()->comment('Scanneur du ticket');
+            $table->foreign('scanner_id')->references('id')->on('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
 

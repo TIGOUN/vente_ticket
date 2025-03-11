@@ -26,7 +26,7 @@ class Ticket extends Model
     public $incrementing = false; // Utilisation d'UUID
     protected $keyType = 'string';
 
-    protected $fillable = ['id', 'event_id', 'encrypted_data', 'is_used', 'email', 'signature', 'qr_code'];
+    protected $fillable = ['id', 'event_id', 'encrypted_data', 'is_used', 'email', 'signature', 'qr_code', 'user_id', 'scanner_id', 'code'];
 
     // Générer une signature cryptographique pour le ticket
     public function generateSignature(): string
@@ -79,7 +79,7 @@ class Ticket extends Model
      */
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Events::class);
     }
 
     /**
@@ -100,5 +100,15 @@ class Ticket extends Model
     public function decryptData()
     {
         return json_decode(Crypt::decryptString($this->encrypted_data), true);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function user_scanner()
+    {
+        return $this->belongsTo(User::class, 'scanner_id');
     }
 }
