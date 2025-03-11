@@ -7,8 +7,8 @@
     <p>Résultat : <strong id="scannedData">@if($scannedData) {{ $scannedData }} @endif</strong></p>
 
     <!-- Instascan CDN -->
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/instascan_assets/instascan.min.js')}}"></script>
+    <script src="{{ asset('assets/instascan_assets/jquery-3.6.0.min.js')}}"></script>
 
     <script>
     $(document).ready(function() {

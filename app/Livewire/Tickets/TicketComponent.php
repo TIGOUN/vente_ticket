@@ -45,7 +45,7 @@ class TicketComponent extends Component
             $ticket = new Ticket();
             $ticket->id = Str::uuid(); // Génération d'un UUID sécurisé
             $ticket->event_id = $this->eventId;
-
+            $ticket->user_id = Auth::user()->id;
             // Données sensibles du ticket (ex: nom du participant, email, etc.)
             $data = [
                 'name' => Auth::user()->name,

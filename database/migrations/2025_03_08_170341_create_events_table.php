@@ -24,8 +24,11 @@ return new class extends Migration
             $table->integer('total_tickets')->default(0)->comment('Nombre total de tickets générés');
             $table->integer('sold_tickets')->default(0)->comment('Nombre de tickets vendus');
             $table->string('branding_image')->nullable()->comment('Branding de l\'évernement');
+            $table->uuid('user_id'); // L'utilisateur qui a crée l'evernement
             $table->softDeletes()->comment('Colonne de suppression deleted_at');
             $table->timestamps(); // Dates de création et mise à jour
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

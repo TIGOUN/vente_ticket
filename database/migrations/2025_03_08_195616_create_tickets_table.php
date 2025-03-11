@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->uuid('id')->primary(); // ID en UUID pour plus de sécurité
+            $table->string('code');
             $table->uuid('event_id'); // L'événement auquel appartient le ticket
+            $table->uuid('user_id'); // L'utilisateur qui a crée le ticket
+            $table->uuid('scanner_id')->nullable(); // L'utilisateur qui a scanné le ticket
             $table->string('signature'); // Stocke la signature du QR Code
             $table->string('qr_code')->nullable(); // Stocke le chemin du fichier QR Code
             $table->longText('encrypted_data'); // Données cryptées (nom, email, etc.)
@@ -24,6 +27,8 @@ return new class extends Migration
 
             // Clé étrangère vers la table des événements
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->foreign('scanner_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

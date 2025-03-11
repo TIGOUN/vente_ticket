@@ -3,6 +3,7 @@
 namespace App\Livewire\Events;
 
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -73,6 +74,7 @@ class EventComponent extends Component
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'location' => $this->location,
+            'user_id' => Auth::user()->id,
             // 'total_tickets_expired' => $this->total_tickets_expired,
             // 'total_tickets_scanned' => $this->total_tickets_scanned,
             // 'total_tickets' => $this->total_tickets,

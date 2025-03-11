@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Event extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuids;
 
     protected $keyType = 'string'; // UUID en tant que clé primaire
     public $incrementing = false; // Désactiver l'auto-incrémentation
@@ -27,6 +28,7 @@ class Event extends Model
         'total_tickets',
         'sold_tickets',
         'branding_image',
+        'user_id',
     ];
 
     protected static function boot()

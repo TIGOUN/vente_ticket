@@ -16,17 +16,19 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\ValidationException;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuids;
 
     protected $primaryKey = 'id';
     public $incrementing = false; // Utilisation d'UUID
     protected $keyType = 'string';
 
-    protected $fillable = ['id', 'event_id', 'encrypted_data', 'is_used', 'email', 'signature', 'qr_code'];
+    protected $fillable = ['id', 'event_id', 'encrypted_data', 'is_used', 'email', 'signature', 'qr_code', 'user_id', 'scanner_id'];
 
     // Générer une signature cryptographique pour le ticket
     public function generateSignature(): string
