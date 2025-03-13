@@ -14,13 +14,19 @@
                     <div class="text-center">
                         <i class="text-info dripicons-information h1"></i>
                         <h4 class="mt-2">Informations</h4>
+
                         <p class="mt-3">
-                        <p><strong>Code du Ticket :</strong> <span id="ticket-code">-</span></p>
-                        <p><strong>Nom de l'Événement :</strong> <span id="event-name">-</span></p>
-                        <p><strong>Date de Création :</strong> <span id="created-date">-</span></p>
-                        <p><strong>Statut :</strong> <span id="is-used">-</span></p>
+
+                            <p><strong>Code du Ticket :</strong> <span id="ticket-code">-</span></p>
+                            <p><strong>Nom de l'Événement :</strong> <span id="event-name">-</span></p>
+                            <p><strong>Date de Création :</strong> <span id="created-date">-</span></p>
+                            <p><strong>Statut :</strong> <span id="is-used">-</span></p>
+                            <p><strong>Scanné par :</strong> <span id="scanned-by">-</span></p>
+
                         </p>
-                        <button type="button" class="my-2 btn btn-info" data-bs-dismiss="modal">Continue</button>
+
+                        <!-- <button type="button" class="my-2 btn btn-info">Marquer comme présent</button> -->
+                        <button type="button" class="my-2 btn btn-info" id="markPresentBtn" data-id="">Marquer comme présent</button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->
@@ -121,8 +127,8 @@
                         $('#event-name').text(data.eventName);
                         $('#created-date').text(data.created);
                         $('#is-used').text(data.is_used);
-
-                        // Afficher le modal
+                        $('#scanned-by').text(data.scanned_by);
+                        $('#markPresentBtn').attr('data-id', data.ticketId);
                         $('#info-alert-modal').modal('show');
                     }
                 })
@@ -130,6 +136,63 @@
                     console.error('Erreur lors du scan:', error);
                 });
         });
+
+
+
+        // Gérer le clic sur le bouton "Marquer comme présent"
+        document.getElementById("markPresentBtn").addEventListener("click", function() {
+            let ticketId = this.getAttribute("data-id"); // Récupère l'ID du ticket
+            if (!ticketId) {
+                alert("Erreur : Aucun ticket sélectionné !");
+                return;
+            }
+
+            fetch("/update/qr-code", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        ticket_id: ticketId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: "success",
+                            title: "Présence marquée avec succès !"
+                        });
+
+                        document.getElementById("is-used").textContent = "Marquer présence";
+                        document.getElementById("scanned-by").textContent = data.scanned_by;
+                    } else {
+                        alert("Erreur : " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Erreur :", error);
+                    alert("Une erreur s'est produite.");
+                });
+        });
+
+
+
+
+
 
         const Toast = Swal.mixin({
             toast: true,

@@ -8,6 +8,7 @@ use App\Livewire\Scanners\ScannerComponent;
 use App\Livewire\Tickets\TicketComponent;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,10 +33,32 @@ Route::middleware('auth')->group(function () {
 
         return response()->json([
             'message' => 'Scan enregistré avec succès',
-            'code' => $ticket->code ?? 'okok',
+            'ticketId' => $ticket->id,
+            'code' => $ticket->code,
             'eventName' => $ticket->event->name ?? 'Inconnu',
             'created' => $ticket->created_at->format('d/m/Y'),
             'is_used' => $ticket->is_used ? 'Oui' : 'Non',
+            'scanned_by' => $ticket->user_scanner->name ?? '-',
+        ]);
+    });
+
+
+    Route::post('/update/qr-code', function (Request $request) {
+        $ticket = Ticket::find($request->ticket_id);
+
+        if (!$ticket) {
+            return response()->json(['success' => false, 'message' => 'Ticket non trouvé !'], 404);
+        }
+
+        $ticket->is_used = 1;
+        $ticket->scanner_id = Auth::user()->id;
+        $ticket->save();
+
+        return response()->json(
+            [
+            'success' => true,
+            'message' => 'Présence marquée avec succès !',
+            'scanned_by' => $ticket->user_scanner->name
         ]);
     });
 });

@@ -25,6 +25,8 @@ class ScannerComponent extends Component
         $this->dispatch('show-details-info');
     }
 
+    
+
     public function render()
     {
         return view('livewire.scanners.scanner-component');
