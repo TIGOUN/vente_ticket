@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
             'code' => $ticket->code,
             'eventName' => $ticket->event->name ?? 'Inconnu',
             'created' => $ticket->created_at->format('d/m/Y'),
-            'is_used' => $ticket->is_used ? 'Marquer présent' : 'Marquer absent',
+            'is_used' => $ticket->is_used ? 'Marquer présent' : 'En attente',
             'scanned_by' => $ticket->user_scanner->name ?? '-',
         ]);
     });

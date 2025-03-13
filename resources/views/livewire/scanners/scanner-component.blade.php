@@ -158,9 +158,9 @@
                     return;
                 }
 
-                        // ✅ Afficher le loader et désactiver le bouton
-        $("#loader").show();
-        $("#markPresentBtn").prop("disabled", true).text("Traitement...");
+                // ✅ Afficher le loader et désactiver le bouton
+                $("#loader").show();
+                $("#markPresentBtn").prop("disabled", true).text("Traitement...");
 
                 fetch("/update/qr-code", {
                         method: "POST",
@@ -206,7 +206,6 @@
                         // ✅ Masquer le loader et réactiver le bouton (toujours exécuté, succès ou erreur)
                         document.getElementById("loader").style.display = "none";
                         document.getElementById("markPresentBtn").disabled = false;
-                        document.getElementById("markPresentBtn").textContent = "Marquer comme présent";
                     });
             });
 
