@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ScanController;
 use App\Livewire\Dashbords\StarterPage;
 use App\Livewire\Events\EventComponent;
 use App\Livewire\Scanners\ScannerComponent;
 use App\Livewire\Tickets\TicketComponent;
+use App\Models\Ticket;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +20,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/events', EventComponent::class)->name('events');
     Route::get('/tickets', TicketComponent::class)->name('tickets');
     Route::get('/scanners', ScannerComponent::class)->name('scanners');
+    // Route::post('/qr-code/scanners', [ScanController::class, 'scanQrCode'])->name('scan.qr.code');
+
+    Route::post('/qr-code/scanners', function (Request $request) {
+        $data = json_decode($request->input('content'), true); // Décoder le JSON reçu
+        $ticket = Ticket::find($data['id']); // Rechercher un ticket par ID
+
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket introuvable'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Scan enregistré avec succès',
+            'code' => $ticket->code ?? 'okok',
+            'eventName' => $ticket->event->name ?? 'Inconnu',
+            'created' => $ticket->created_at->format('d/m/Y'),
+            'is_used' => $ticket->is_used ? 'Oui' : 'Non',
+        ]);
+    });
 });
 
 Route::middleware('auth')->group(function () {

@@ -3,15 +3,26 @@
 namespace App\Livewire\Scanners;
 
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ScannerComponent extends Component
 {
-    public string $scannedData = ''; // Stocke la donnée scannée
+    public $scannedData = '';
+    public $code = '-', $ticketDate = '-', $eventName = '-'; // Stocke la donnée scannée
 
-    public function processScan($data)
+    // #[On('send-cam-data')]
+    public function processScan($content)
     {
-        $this->scannedData = $data;
+        $data = json_decode($content, true);
+        $ticket = Ticket::findOrFail($data['id']);
+        $this->code = $ticket->code ?? "-";
+        $this->ticketDate = $ticket->created_at ?? "-";
+        $this->eventName = $ticket->event->name ?? "-";
+        dd($content);
+        // $this->js("alert('\ljkjkjkjknk\')");
+        $this->dispatch('show-details-info');
     }
 
     public function render()

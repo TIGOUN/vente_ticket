@@ -1,48 +1,39 @@
 <div class="text-center">
     <h3>Scanner un Ticket</h3>
 
-    <button id="startScanner" class="btn btn-success text-start">Démarrer le scan</button>
+    <button id="startScanner" class="text-start btn btn-success">Démarrer le scan</button>
 
     <video id="scannerVideo" width="100%" height="auto" style="border: 1px solid #ddd; margin-top: 15px;"></video>
 
-    @if ($scannedData)
-    {{ $scannedData }}
-    @endif
-    <!-- <div class="modal fade" id="scrollable-modal-show-details" tabindex="-1" role="dialog"
-        aria-labelledby="scrollableModalTitle1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    Hi !!!
-                </div>
-            </div>
-        </div>
-    </div> -->
+    <p>Résultat : <strong id="scannedData">@if($scannedData) {{ $scannedData }} @endif</strong></p>
 
-    <div class="modal fade" id="scrollable-modal-show-details" tabindex="-1" role="dialog"
-        aria-labelledby="scrollableModalTitle1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div wire:ignore id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scrollableModalTitle1">
-                        Text
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                <div class="p-4 modal-body">
+                    <div class="text-center">
+                        <i class="text-info dripicons-information h1"></i>
+                        <h4 class="mt-2">Informations</h4>
+                        <p class="mt-3">
+                        <p><strong>Code du Ticket :</strong> <span id="ticket-code">-</span></p>
+                        <p><strong>Nom de l'Événement :</strong> <span id="event-name">-</span></p>
+                        <p><strong>Date de Création :</strong> <span id="created-date">-</span></p>
+                        <p><strong>Statut :</strong> <span id="is-used">-</span></p>
+                        </p>
+                        <button type="button" class="my-2 btn btn-info" data-bs-dismiss="modal">Continue</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    Hi !!!
-                </div>
-            </div>
-        </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div>
 
 
-    <!-- Instascan CDN -->
+
     <script src="{{ asset('assets/cam/instascan.min.js') }}"></script>
     <script src="{{ asset('assets/cam/jquery.min.js') }}"></script>
 
     <script>
-    $(document).ready(function() {
+        // document.addEventListener('livewire:initialized', () => {
         // Définir les options de scanner
         let scanner = new Instascan.Scanner({
             video: document.getElementById('scannerVideo'),
@@ -80,7 +71,7 @@
                             }
                         });
                         Toast.fire({
-                            icon: "danger",
+                            icon: "error",
                             title: "Oups !!! Aucune caméra arrière détectée."
                         });
                     }
@@ -97,7 +88,7 @@
                         }
                     });
                     Toast.fire({
-                        icon: "danger",
+                        icon: "error",
                         title: "Oups !!! Aucune caméra détectée."
                     });
                 }
@@ -108,24 +99,54 @@
 
         scanner.addListener('scan', function(content) {
             $('#scannedData').text(content); // Met à jour l'affichage du contenu scanné
-            Livewire.dispatch('processScan', content); // Envoie à Livewire
+            // scanner.stop();
+            // backCamera = null;
+            fetch('/qr-code/scanners', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Important pour Laravel
+                    },
+                    body: JSON.stringify({
+                        content: content // Envoie le JSON du QR code
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Erreur: ' + data.error);
+                    } else {
+                        // Injecter les données dans la vue
+                        $('#ticket-code').text(data.code);
+                        $('#event-name').text(data.eventName);
+                        $('#created-date').text(data.created);
+                        $('#is-used').text(data.is_used);
 
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 5000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
-            });
-            Toast.fire({
-                icon: "success",
-                title: "Scanner avec succès !!!"
-            });
+                        // Afficher le modal
+                        $('#info-alert-modal').modal('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors du scan:', error);
+                });
         });
-    });
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        Toast.fire({
+            icon: "success",
+            title: "Scanner avec succès !!!"
+        });
+        // });
     </script>
 </div>

@@ -176,7 +176,6 @@
     <script src="{{ asset('assets/js/app.min.js') }}"></script>
 
     <!-- third party js -->
-    <script src="{{ asset('assets/js/vendor/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/jquery-jvectormap-1.2.2.min.js') }}"></script>
     <script src="{{ asset('assets/js/vendor/jquery-jvectormap-world-mill-en.js') }}"></script>
     <!-- third party js ends -->
@@ -186,7 +185,7 @@
     <script src="{{ asset('assets/sweetalertjs/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('service-worker.js') }}"></script>
 
-    <script>
+    <!-- <script>
     // Si le service worker est disponible dans le navigateur
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -200,7 +199,7 @@
                 });
         });
     }
-    </script>
+    </script> -->
     <!-- end demo js-->
     @livewireScripts
 </body>
