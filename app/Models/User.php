@@ -47,8 +47,8 @@ class User extends Authenticatable
         ];
     }
 
-    // public function event()
-    // {
-    //     return $this->belongsTo(Events::class, 'event_id');
-    // }
+    public function creatorUser()
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
 }

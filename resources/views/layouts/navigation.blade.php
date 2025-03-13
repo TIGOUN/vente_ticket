@@ -4,7 +4,7 @@
      <div class="leftbar-user">
          <a href="javascript: void(0);">
              <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" height="42"
-                 class="rounded-circle shadow-sm">
+                 class="shadow-sm rounded-circle">
              <span class="leftbar-user-name">Dominic Keller</span>
          </a>
      </div>
@@ -17,32 +17,14 @@
          <li class="side-nav-item">
              <a wire:navigate href="{{ route('dashboard') }}" class="side-nav-link">
                  <i class="uil-home-alt"></i>
-                 <span class="badge bg-success float-end">4</span>
+                 <span class="float-end bg-success badge">4</span>
                  <span> Tableau de bord </span>
              </a>
          </li>
 
          <li class="side-nav-item side-nav-title">Apps</li>
 
-         <li class="side-nav-item">
-             <a data-bs-toggle="collapse" href="#sidebarStudents" aria-expanded="false" aria-controls="sidebarEcommerce"
-                 class="side-nav-link">
-                 <i class="uil-store"></i>
-                 <span> Etudiants </span>
-                 <span class="menu-arrow"></span>
-             </a>
-             <div class="collapse" id="sidebarStudents">
-                 <ul class="side-nav-second-level">
-                     <li>
-                         <a wire:navigate href="#">Listes des étudiants</a>
-                     </li>
-                     <li>
-                         <a href="apps-ecommerce-products-details.html">Products Details</a>
-                     </li>
-                 </ul>
-             </div>
-         </li>
-
+         @if (Auth::user()->type_user === 'admin')
          <li class="side-nav-item">
              <a wire:navigate href="{{ route('events') }}" class="side-nav-link">
                  <i class="uil-store"></i>
@@ -56,6 +38,8 @@
                  <span> Tickets </span>
              </a>
          </li>
+         @endif
+
 
          <li class="side-nav-item">
              <a wire:navigate href="{{ route('scanners') }}" class="side-nav-link">
@@ -63,6 +47,15 @@
                  <span> Scanner </span>
              </a>
          </li>
+
+         @if (Auth::user()->type_user === 'admin')
+         <li class="side-nav-item">
+             <a wire:navigate href="{{ route('users') }}" class="side-nav-link">
+                 <i class="uil-store"></i>
+                 <span> Utilisateurs </span>
+             </a>
+         </li>
+         @endif
 
      </ul>
  </div>

@@ -7,10 +7,12 @@ use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\WithPagination;
 
 class TicketComponent extends Component
 {
-    public $showCreateTicketForm, $numberTicket, $eventId, $events, $tickets;
+    use WithPagination;
+    public $showCreateTicketForm, $numberTicket, $eventId, $events;
 
     public function showingCreateTicketComponent()
     {
@@ -21,7 +23,6 @@ class TicketComponent extends Component
     public function mount()
     {
         $this->events = Events::latest()->get();
-        $this->tickets = Ticket::latest()->get();
     }
 
     // Définir les règles de validation
@@ -66,6 +67,7 @@ class TicketComponent extends Component
 
     public function render()
     {
-        return view('livewire.tickets.ticket-component');
+        $tickets = Ticket::paginate(5);
+        return view('livewire.tickets.ticket-component', ['tickets' => $tickets]);
     }
 }

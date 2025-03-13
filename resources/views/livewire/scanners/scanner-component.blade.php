@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="">
     <style>
         .spinner-border {
             width: 2rem;
@@ -12,11 +12,16 @@
 
     <h3>Scanner un Ticket</h3>
 
-    <button id="startScanner" class="text-start btn btn-success">Démarrer le scan</button>
+    <div class="row">
+        <div class="col-6">
+            <button id="startScanner" class="text-start btn btn-success">Démarrer le scan</button>
+        </div>
+        <div class="text-end col-6">
+            <button id="stopScanner" class="text-start btn btn-danger">Arreter le scan</button>
+        </div>
+    </div>
 
     <video id="scannerVideo" width="100%" height="auto" style="border: 1px solid #ddd; margin-top: 15px;"></video>
-
-    <p>Résultat : <strong id="scannedData">@if($scannedData) {{ $scannedData }} @endif</strong></p>
 
     <div wire:ignore id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -38,6 +43,8 @@
 
                         <!-- <button type="button" class="my-2 btn btn-info">Marquer comme présent</button> -->
                         <button type="button" class="my-2 btn btn-info" id="markPresentBtn" data-id="">Marquer comme présent</button>
+
+
                     </div>
                 </div>
             </div><!-- /.modal-content -->
@@ -206,14 +213,17 @@
                         // ✅ Masquer le loader et réactiver le bouton (toujours exécuté, succès ou erreur)
                         document.getElementById("loader").style.display = "none";
                         document.getElementById("markPresentBtn").disabled = false;
+                        document.getElementById("markPresentBtn").textContent = "Présence marquer";
                     });
             });
 
-
-
-
-
+            // Arreter le scan
+            document.getElementById("stopScanner").addEventListener("click", function() {
+                scanner.stop();
+                backCamera = null;
+            });
 
         });
     </script>
+</div>
 </div>

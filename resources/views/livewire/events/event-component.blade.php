@@ -4,32 +4,32 @@
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
+                    <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Layouts</a></li>
                         <li class="breadcrumb-item active">Detached Sidenav</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Cités</h4>
+                <h4 class="page-title">Evernements</h4>
             </div>
         </div>
     </div>
     <!-- end page title -->
 
-    <div class="row mb-2">
+    <div class="mb-2 row">
         <div class="col-sm-7">
             Ajouter un évernement
         </div>
         <div class="col-sm-5">
             <div class="text-sm-end">
                 @if ($showCreateEventForm)
-                <a href="#" class="btn btn-danger mb-2" wire:click="showingCreateEventComponent">
-                    <i class="mdi mdi-close-circle me-2"></i>
+                <a href="#" class="mb-2 btn btn-danger" wire:click="showingCreateEventComponent">
+                    <i class="me-2 mdi mdi-close-circle"></i>
                     Fermer
                 </a>
                 @else
-                <a href="#" class="btn btn-success mb-2" wire:click="showingCreateEventComponent">
-                    <i class="mdi mdi-plus-circle me-2"></i>
+                <a href="#" class="mb-2 btn btn-success" wire:click="showingCreateEventComponent">
+                    <i class="me-2 mdi mdi-plus-circle"></i>
                     Ajouter
                 </a>
                 @endif
@@ -115,7 +115,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row mb-2">
+                    <div class="mb-2 row">
                         <div class="col-sm-12">
                             Listes des cités
                         </div>

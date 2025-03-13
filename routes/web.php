@@ -6,6 +6,7 @@ use App\Livewire\Dashbords\StarterPage;
 use App\Livewire\Events\EventComponent;
 use App\Livewire\Scanners\ScannerComponent;
 use App\Livewire\Tickets\TicketComponent;
+use App\Livewire\Users\UsersComponent;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/events', EventComponent::class)->name('events');
     Route::get('/tickets', TicketComponent::class)->name('tickets');
     Route::get('/scanners', ScannerComponent::class)->name('scanners');
-    // Route::post('/qr-code/scanners', [ScanController::class, 'scanQrCode'])->name('scan.qr.code');
+    Route::get('/users', UsersComponent::class)->name('users');
 
     Route::post('/qr-code/scanners', function (Request $request) {
         $data = json_decode($request->input('content'), true); // Décoder le JSON reçu
