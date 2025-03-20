@@ -13,23 +13,54 @@ class TicketComponent extends Component
 {
     use WithPagination;
     public $showCreateTicketForm, $numberTicket, $eventId, $events;
+    public $checked = [], $checkedPage = false, $checkedAll = false, $perPage = 5, $search;
 
     public function showingCreateTicketComponent()
     {
         $this->showCreateTicketForm = !$this->showCreateTicketForm;
     }
 
-    // Récupérer les événements pour le formulaire
-    public function mount()
+    public function mount($eventId)
     {
-        $this->events = Events::latest()->get();
+        $this->eventId = $eventId;
+    }
+
+    public function checkedAllItem()
+    {
+        $this->checkedAll = true;
+        $this->checked = $this->getTickets()->pluck('id')->map(fn($item) => (string)$item)->toArray();
+    }
+
+    private function getTickets()
+    {
+        return Ticket::where('event_id', $this->eventId)
+            ->where('is_selled', 0)
+            ->get();
+    }
+
+    public function updatedCheckedPage($value)
+    {
+        if ($value) {
+            $this->checked = $this->getTickets()->pluck('id')->map(fn($item) => (string)$item)->toArray();
+        } else {
+            $this->checked = [];
+        }
+    }
+
+    public function updatedChecked()
+    {
+        $this->checkedPage = false;
+    }
+
+    public function isChecked($ticketId)
+    {
+        return in_array($ticketId, $this->checked);
     }
 
     // Définir les règles de validation
     public function rules()
     {
         return [
-            'eventId' => 'required|exists:events,id', // L'événement est requis et doit exister dans la table 'events'
             'numberTicket' => 'required|integer|min:1', // Le nombre de tickets est requis, doit être un entier et supérieur ou égal à 1
         ];
     }
@@ -62,12 +93,12 @@ class TicketComponent extends Component
         }
 
         // 3- Affichage d'un message de confirmation
-        return redirect()->route('tickets');
+        return redirect()->route('tickets', $this->eventId);
     }
 
     public function render()
     {
-        $tickets = Ticket::paginate(5);
+        $tickets = Ticket::where('event_id', $this->eventId)->orderByDesc('code')->paginate(5);
         return view('livewire.tickets.ticket-component', ['tickets' => $tickets]);
     }
 }

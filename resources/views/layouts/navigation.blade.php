@@ -32,12 +32,7 @@
              </a>
          </li>
 
-         <li class="side-nav-item">
-             <a wire:navigate href="{{ route('tickets') }}" class="side-nav-link">
-                 <i class="uil-store"></i>
-                 <span> Tickets </span>
-             </a>
-         </li>
+
          @endif
 
 

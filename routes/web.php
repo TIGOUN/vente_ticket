@@ -20,7 +20,7 @@ Route::get('/dashboard', StarterPage::class)->middleware(['auth', 'verified'])->
 
 Route::middleware('auth')->group(function () {
     Route::get('/events', EventComponent::class)->name('events');
-    Route::get('/tickets', TicketComponent::class)->name('tickets');
+    Route::get('/tickets/{eventId}', TicketComponent::class)->name('tickets');
     Route::get('/scanners', ScannerComponent::class)->name('scanners');
     Route::get('/users', UsersComponent::class)->name('users');
 
@@ -57,10 +57,11 @@ Route::middleware('auth')->group(function () {
 
         return response()->json(
             [
-            'success' => true,
-            'message' => 'Présence marquée avec succès !',
-            'scanned_by' => $ticket->user_scanner->name
-        ]);
+                'success' => true,
+                'message' => 'Présence marquée avec succès !',
+                'scanned_by' => $ticket->user_scanner->name
+            ]
+        );
     });
 });
 

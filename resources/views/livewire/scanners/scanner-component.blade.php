@@ -213,7 +213,7 @@
                         // ✅ Masquer le loader et réactiver le bouton (toujours exécuté, succès ou erreur)
                         document.getElementById("loader").style.display = "none";
                         document.getElementById("markPresentBtn").disabled = false;
-                        document.getElementById("markPresentBtn").textContent = "Présence marquer";
+                        document.getElementById("markPresentBtn").textContent = "Présence marquer ✅";
                     });
             });
 
@@ -225,5 +225,6 @@
 
         });
     </script>
+</div>
 </div>
 </div>

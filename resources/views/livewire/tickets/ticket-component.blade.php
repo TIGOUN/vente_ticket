@@ -44,17 +44,6 @@
                 <div class="card-body">
                     <form wire:submit.prevent="createTicket">
                         <div class="mb-3">
-                            <label for="code" class="form-label">Evernement</label>
-                            <select wire:model="eventId" class="form-select">
-                                <option value="">Sélectionnez un evernement</option>
-                                @foreach ($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('code') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-
-                        <div class="mb-3">
                             <label for="numberTicket" class="form-label">Nombre de tickets</label>
                             <input type="number" id="numberTicket" wire:model="numberTicket" min="0"
                                 class="form-control @error('numberTicket') is-invalid @enderror" required>
@@ -69,9 +58,6 @@
     </div>
     @endif
 
-
-
-
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -83,20 +69,52 @@
                     </div>
 
                     <div class="table-responsive">
+                        @if ($this->checked)
+                        <button
+                            class="me-1 btn btn-info btn-sm fs-6"><i
+                                class="mdi mdi-cash"></i>
+                            Marquer vendu
+                            @if ($this->checked > 0)
+                            <strong>{{ count($this->checked) }} tickets</strong>
+                            @else
+                            <strong>{{ count($this->checked) }} ticket</strong>
+                            @endif
+                        </button>
+
+                        <button
+                            class="me-1 btn btn-info btn-sm fs-6"><i
+                                class="mdi mdi-cash"></i>
+                            Exporter en Pdf
+                            @if ($this->checked > 0)
+                            <strong>{{ count($this->checked) }} tickets</strong>
+                            @else
+                            <strong>{{ count($this->checked) }} ticket</strong>
+                            @endif
+                        </button>
+                        @else
+                        <div>
+                            <strong>Sélectionner les tickets</strong> <br>
+                            <span style="font-size: 13px;">Vous pouvez sélectionner plusieurs
+                                tickets.
+                            </span>
+                        </div>
+                        @endif
+
                         <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
                             <thead class="table-light">
                                 <tr>
                                     <th>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="customCheck1">
+                                            <input type="checkbox" id="selectEmploye" wire:model.live="checkedPage" class="form-check-input" id="customCheck1">
                                             <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                         </div>
                                     </th>
 
                                     <th>Code</th>
                                     <th>QRCode</th>
+                                    <th>Présence</th>
                                     <th>Statut</th>
-                                    <th>Mail</th>
+                                    <th>Payer électroniquement par</th>
                                     <th>Scanner par</th>
                                     <th>Générer par</th>
                                     <th class="text-end">Actions</th>
@@ -104,10 +122,17 @@
                             </thead>
                             <tbody>
                                 @foreach ($tickets as $ticket)
-                                <tr wire:key="{{ $ticket->id }}">
+                                <tr wire:key="{{ $ticket->id }}" @if($this->isChecked($ticket->id)) class="table-primary" @endif>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                                            <input type="checkbox"
+                                                wire:model.live="checked"
+                                                id="customCheck2"
+                                                class="form-check-input"
+                                                value="{{ $ticket->id }}"
+                                                id="{{ $ticket->id }}"
+                                                @if($ticket->is_selled) disabled @endif
+                                            >
                                             <label class="form-check-label" for="customCheck2">&nbsp;</label>
                                         </div>
                                     </td>
@@ -141,7 +166,25 @@
                                     </td>
 
                                     <td>
-                                        {{ $ticket->email ?? '-' }}
+                                        @if ($ticket->is_selled)
+                                        <span class="badge-outline-success badge">
+                                            Vendu
+                                        </span>
+                                        @else
+                                        <span class="badge-outline-danger badge">
+                                            Non vendu
+                                        </span>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        @if ($ticket->email && $ticket->user_paid_online_name)
+                                        {{ $ticket->email }}
+                                        {{ $ticket->user_paid_online_name }}
+                                        @else
+                                        -
+                                        @endif
+
                                     </td>
 
                                     <td>

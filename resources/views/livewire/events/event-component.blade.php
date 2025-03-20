@@ -169,7 +169,9 @@
                                         {{ $event->user->name }}
                                     </td>
                                     <td>
-                                        -
+                                        <a href="{{ route('tickets', $event->id) }}" class="btn btn-sm btn-success">
+                                            Ticket
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach
