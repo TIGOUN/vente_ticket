@@ -69,12 +69,12 @@
                     </div>
 
                     <div class="table-responsive">
-                        @if ($this->checked)
-                        <button
+                        @if (count($this->checked) > 0)
+                        <button type="button" wire:click="makeTicketHasPayed"
                             class="me-1 btn btn-info btn-sm fs-6"><i
                                 class="mdi mdi-cash"></i>
                             Marquer vendu
-                            @if ($this->checked > 0)
+                            @if ($this->checked > 1)
                             <strong>{{ count($this->checked) }} tickets</strong>
                             @else
                             <strong>{{ count($this->checked) }} ticket</strong>
@@ -85,7 +85,7 @@
                             class="me-1 btn btn-info btn-sm fs-6"><i
                                 class="mdi mdi-cash"></i>
                             Exporter en Pdf
-                            @if ($this->checked > 0)
+                            @if ($this->checked > 1)
                             <strong>{{ count($this->checked) }} tickets</strong>
                             @else
                             <strong>{{ count($this->checked) }} ticket</strong>
@@ -210,3 +210,28 @@
         </div>
     </div>
 </div>
+
+@script
+<script>
+    $wire.on('show-message', (data) => {
+        const message = data[0].message; // Récupère le message passé depuis le dispatch
+        const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: type,
+            title: message
+        });
+    });
+</script>
+@endscript

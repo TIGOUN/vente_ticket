@@ -27,7 +27,7 @@
 <body class="loading" data-layout-color="light" data-layout="detached" data-rightbar-onstart="true">
 
     <!-- Topbar Start -->
-    <div class="navbar-custom topnav-navbar topnav-navbar-dark">
+    <div class="topnav-navbar topnav-navbar-dark navbar-custom">
         <div class="container-fluid">
 
             <!-- LOGO -->
@@ -40,14 +40,14 @@
                 </span>
             </a>
 
-            <ul class="list-unstyled topbar-menu float-end mb-0">
+            <ul class="topbar-menu float-end mb-0 list-unstyled">
 
                 <li class="dropdown notification-list d-xl-none">
                     <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
                         <i class="dripicons-search noti-icon"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0">
+                    <div class="p-0 dropdown-menu dropdown-menu-animated dropdown-lg">
                         <form class="p-3">
                             <input type="text" class="form-control" placeholder="Search ..."
                                 aria-label="Recipient's username">
@@ -63,7 +63,7 @@
                 </li>
 
                 <li class="dropdown notification-list">
-                    <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"
+                    <a class="me-0 nav-link dropdown-toggle nav-user arrow-none" data-bs-toggle="dropdown"
                         id="topbar-userdrop" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="account-user-avatar">
                             <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image"
@@ -74,34 +74,34 @@
                             <span class="account-position">{{ Auth::user()->name }}</span>
                         </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown"
+                    <div class="topbar-dropdown-menu dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown"
                         aria-labelledby="topbar-userdrop">
                         <!-- item-->
-                        <div class=" dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Welcome !</h6>
+                        <div class="dropdown-header noti-title">
+                            <h6 class="m-0 text-overflow">Welcome !</h6>
                         </div>
 
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="mdi mdi-account-circle me-1"></i>
+                            <i class="me-1 mdi mdi-account-circle"></i>
                             <span>My Account</span>
                         </a>
 
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="mdi mdi-account-edit me-1"></i>
+                            <i class="me-1 mdi mdi-account-edit"></i>
                             <span>Settings</span>
                         </a>
 
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="mdi mdi-lifebuoy me-1"></i>
+                            <i class="me-1 mdi mdi-lifebuoy"></i>
                             <span>Support</span>
                         </a>
 
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="mdi mdi-lock-outline me-1"></i>
+                            <i class="me-1 mdi-lock-outline mdi"></i>
                             <span>Lock Screen</span>
                         </a>
 
@@ -110,7 +110,7 @@
                             @csrf
                             <a wire:navigate href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 this.closest('form').submit();" class="dropdown-item notify-item">
-                                <i class="mdi mdi-logout me-1"></i>
+                                <i class="me-1 mdi mdi-logout"></i>
                                 <span>Logout</span>
                             </a>
                         </form>
@@ -153,7 +153,7 @@
                                 © Hyper - Coderthemes.com
                             </div>
                             <div class="col-md-6">
-                                <div class="text-md-end footer-links d-none d-md-block">
+                                <div class="d-md-block text-md-end footer-links d-none">
                                     <a href="javascript: void(0);">About</a>
                                     <a href="javascript: void(0);">Support</a>
                                     <a href="javascript: void(0);">Contact Us</a>
@@ -183,6 +183,7 @@
     <!-- demo app -->
     <script src="{{ asset('assets/js/pages/demo.dashboard.js') }}"></script>
     <script src="{{ asset('assets/sweetalertjs/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/sweetalertjs/sweetalert2@11.js') }}"></script>
     <script src="{{ asset('service-worker.js') }}"></script>
 
     <!-- <script>

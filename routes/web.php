@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
             return response()->json(['success' => false, 'message' => 'Ticket non trouvé !'], 404);
         }
 
+        if ($ticket->is_used) {
+            return response()->json(['success' => false, 'message' => 'Ticket déjà scanné par ' . $ticket->user_scanner->name], 200);
+        }
+
         $ticket->is_used = 1;
         $ticket->scanner_id = Auth::user()->id;
         $ticket->save();
