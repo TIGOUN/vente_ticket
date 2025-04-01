@@ -183,3 +183,27 @@
         </div>
     </div>
 </div>
+@script
+<script>
+    $wire.on('show-message', (data) => {
+        const message = data[0].message; // Récupère le message passé depuis le dispatch
+        const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: type,
+            title: message
+        });
+    });
+</script>
+@endscript

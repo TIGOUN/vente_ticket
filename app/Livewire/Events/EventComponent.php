@@ -31,7 +31,7 @@ class EventComponent extends Component
     public $branding_image;
     public $branding_image_url;
 
-    public $events, $message, $typeMessage;
+    public $message, $typeMessage;
 
     protected $rules = [
         // 'code' => 'required|string|max:255',
@@ -50,8 +50,6 @@ class EventComponent extends Component
     public function mount($eventId = null)
     {
         $this->code = generateUniqueReference();
-        // $this->code = strtoupper(Str::random(3)) . '-' . strtoupper(Str::random(3)) . '-' . strtoupper(Str::random(3));
-        $this->events = Events::latest()->get();
         // if ($eventId) {
         //     $event = Event::findOrFail($eventId);
         //     $this->eventId = $event->id;
@@ -94,14 +92,12 @@ class EventComponent extends Component
 
             $this->showingCreateEventComponent();
             $this->dispatch('show-message', [
-                'message' => 'Evernements créer avec succès!!!',
+                'message' => 'Evernement créer avec succès!!!',
                 'typeMessage' => 'success',
             ]);
-
             $this->dispatch('refresh-events-dataTable');
         } catch (Exception $e) {
             DB::rollback();
-            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Opérations échouée !!!',
@@ -113,11 +109,19 @@ class EventComponent extends Component
     public function showingCreateEventComponent()
     {
         $this->showCreateEventForm = !$this->showCreateEventForm;
+        $this->code = generateUniqueReference();
+        $this->reset(
+            'name',
+            'description',
+            'start_date',
+            'end_date',
+            'location',
+        );
     }
 
     #[On('refresh-events-dataTable')]
     public function render()
     {
-        return view('livewire.events.event-component');
+        return view('livewire.events.event-component', ['events' => Events::latest()->get()]);
     }
 }
