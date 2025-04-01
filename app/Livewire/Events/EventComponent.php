@@ -3,7 +3,12 @@
 namespace App\Livewire\Events;
 
 use App\Models\Events;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -26,7 +31,7 @@ class EventComponent extends Component
     public $branding_image;
     public $branding_image_url;
 
-    public $events;
+    public $events, $message, $typeMessage;
 
     protected $rules = [
         // 'code' => 'required|string|max:255',
@@ -45,6 +50,7 @@ class EventComponent extends Component
     public function mount($eventId = null)
     {
         $this->code = generateUniqueReference();
+        // $this->code = strtoupper(Str::random(3)) . '-' . strtoupper(Str::random(3)) . '-' . strtoupper(Str::random(3));
         $this->events = Events::latest()->get();
         // if ($eventId) {
         //     $event = Event::findOrFail($eventId);
@@ -66,35 +72,42 @@ class EventComponent extends Component
     public function createEvent()
     {
         $this->validate();
-        // dd($this);
-        $eventData = [
-            'code' => $this->code,
-            'name' => $this->name,
-            'description' => $this->description,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'location' => $this->location,
-            'user_id' => Auth::user()->id,
-            // 'total_tickets_expired' => $this->total_tickets_expired,
-            // 'total_tickets_scanned' => $this->total_tickets_scanned,
-            // 'total_tickets' => $this->total_tickets,
-            // 'sold_tickets' => $this->sold_tickets,
-        ];
+        try {
+            DB::beginTransaction();
+            $eventData = [
+                'code' => $this->code,
+                'name' => $this->name,
+                'description' => $this->description,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date,
+                'location' => $this->location,
+                'user_id' => Auth::user()->id
+            ];
 
-        if ($this->branding_image) {
-            $brandingImagePath = $this->branding_image->store('events/branding_images', 'public');
-            $eventData['branding_image'] = $brandingImagePath;
+            if ($this->branding_image) {
+                $brandingImagePath = $this->branding_image->store('events/branding_images', 'public');
+                $eventData['branding_image'] = $brandingImagePath;
+            }
+
+            Events::create($eventData);
+            DB::commit();
+
+            $this->showingCreateEventComponent();
+            $this->dispatch('show-message', [
+                'message' => 'Evernements créer avec succès!!!',
+                'typeMessage' => 'success',
+            ]);
+
+            $this->dispatch('refresh-events-dataTable');
+        } catch (Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+            Log::error($e->getMessage());
+            $this->dispatch('show-message', [
+                'message' => 'Opérations échouée !!!',
+                'typeMessage' => 'error',
+            ]);
         }
-
-        // if ($this->eventId) {
-        //     $event = Event::findOrFail($this->eventId);
-        //     $event->update($eventData);
-        // } else {
-        Events::create($eventData);
-        // }
-
-        // session()->flash('message', 'L\'événement a été enregistré avec succès!');
-        return redirect()->route('events');
     }
 
     public function showingCreateEventComponent()
@@ -102,6 +115,7 @@ class EventComponent extends Component
         $this->showCreateEventForm = !$this->showCreateEventForm;
     }
 
+    #[On('refresh-events-dataTable')]
     public function render()
     {
         return view('livewire.events.event-component');

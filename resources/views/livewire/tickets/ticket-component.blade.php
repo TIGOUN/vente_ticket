@@ -47,7 +47,7 @@
                             <label for="numberTicket" class="form-label">Nombre de tickets</label>
                             <input type="number" id="numberTicket" wire:model="numberTicket" min="0"
                                 class="form-control @error('numberTicket') is-invalid @enderror" required>
-                            @error('numberTicket') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('numberTicket') <span class="text-danger">{{ $error->has('numberTicket') }}</span> @enderror
                         </div>
 
                         <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -81,7 +81,7 @@
                             @endif
                         </button>
 
-                        <button
+                        <button type="button" wire:click="generateCompileTickets"
                             class="me-1 btn btn-info btn-sm fs-6"><i
                                 class="mdi mdi-cash"></i>
                             Exporter en Pdf

@@ -4,8 +4,10 @@ namespace App\Livewire\Tickets;
 
 use App\Models\Events;
 use App\Models\Ticket;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -44,25 +46,68 @@ class TicketComponent extends Component
     public function makeTicketHasPayed()
     {
         try {
+            DB::beginTransaction();
+
             // Mettre à jour en une seule requête (optimisé)
             Ticket::whereIn('id', $this->checked)->update(['is_selled' => 1]);
 
+            DB::commit();
             $this->checked = [];
-            $this->message = 'Tickets marqués comme vendu avec succès !!!';
-            $this->typeMessage = 'success';
             $this->dispatch('show-message', [
-                'message' => $this->message,
-                'typeMessage' => $this->typeMessage,
+                'message' => 'Tickets marqués comme vendu avec succès !!!',
+                'typeMessage' => 'success',
             ]);
 
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
+            DB::rollback();
             Log::error($e->getMessage());
-            $this->message = 'Opérations échouée !!!';
-            $this->typeMessage = 'error';
             $this->dispatch('show-message', [
-                'message' => $this->message,
-                'typeMessage' => $this->typeMessage,
+                'message' => 'Opérations échouée !!!',
+                'typeMessage' => 'error',
+            ]);
+        }
+    }
+
+
+    public function generateCompileTickets()
+    {
+        try {
+            // Vérifier si des tickets sont sélectionnés
+            if (!is_array($this->checked) || empty($this->checked)) {
+                $this->dispatch('show-message', [
+                    'errorMessage' => 'Aucun ticket sélectionné.',
+                    'typeMessage' => 'error',
+                ]);
+                return;
+            }
+
+            // Récupérer les tickets sélectionnés
+            $tickets = Ticket::whereIn('id', $this->checked)->get();
+            $event = Events::findOrFail($this->eventId);
+
+            if ($tickets->isEmpty()) {
+                $this->dispatch('show-message', [
+                    'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
+                    'typeMessage' => 'error',
+                ]);
+                return;
+            }
+
+            // Générer le PDF avec les tickets et leurs codes QR
+            $pdf = Pdf::loadView('pdfs.tickets_compile', compact('tickets', 'event'))
+                ->setPaper('a4', 'portrait');
+
+            // Télécharger le PDF
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->stream();
+            }, 'tickets_' . time() . '_' . now() . '.pdf');
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            dd($e->getMessage());
+            $this->dispatch('show-message', [
+                'message' => 'Erreur lors de la génération du PDF.',
+                'typeMessage' => 'error',
             ]);
         }
     }
@@ -101,6 +146,8 @@ class TicketComponent extends Component
         $this->validate();
 
         try {
+            DB::beginTransaction();
+
             // 2- Sauvegarde des données du ticket dans la base de données
             for ($i = 0; $i < $this->numberTicket; $i++) // Création du nombre de tickets demandé
             {
@@ -122,24 +169,23 @@ class TicketComponent extends Component
                 $ticket->save();
             }
 
+            DB::commit();
+
             $this->showCreateTicketForm = false;
             $this->numberTicket = null;
 
-            $this->message = 'Tickets créés avec succès!!!';
-            $this->typeMessage = 'success';
             $this->dispatch('show-message', [
-                'message' => $this->message,
-                'typeMessage' => $this->typeMessage,
+                'message' => 'Tickets créés avec succès!!!',
+                'typeMessage' => 'success',
             ]);
 
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
+            DB::rollback();
             Log::error($e->getMessage());
-            $this->message = 'Opérations échouée !!!';
-            $this->typeMessage = 'error';
             $this->dispatch('show-message', [
-                'message' => $this->message,
-                'typeMessage' => $this->typeMessage,
+                'message' => 'Opérations échouée !!!',
+                'typeMessage' => 'error',
             ]);
         }
     }
