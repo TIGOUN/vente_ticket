@@ -5,9 +5,11 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="m-0 breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Layouts</a></li>
-                        <li class="breadcrumb-item active">Detached Sidenav</li>
+                        <li class="breadcrumb-item">
+                            <bo href="javascript: void(0);">Tableau de bord</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Evernements</a></li>
+                        <li class="breadcrumb-item active">Liste des évernements</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Evernements</h4>
@@ -111,13 +113,25 @@
 
 
 
+
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="mb-2 row">
                         <div class="col-sm-12">
-                            Listes des cités
+                            Liste des évernements
+                        </div>
+                    </div>
+
+                    <div class="mb-2 row">
+                        <div class="col-md-4">
+                            <input wire:model.live="search" type="text" class="form-control"
+                                placeholder="Rechercher par nom d’événement">
+                        </div>
+                        <div class="col-md-3">
+                            <input wire:model.live="date" type="date" class="form-control"
+                                placeholder="Date de création">
                         </div>
                     </div>
 
@@ -142,6 +156,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if (count($events) > 0)
                                 @foreach ($events as $event)
                                 <tr wire:key="{{ $event->id }}">
                                     <td>
@@ -175,6 +190,11 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @else
+                                <tr>
+                                    Pas de données
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -185,25 +205,25 @@
 </div>
 @script
 <script>
-    $wire.on('show-message', (data) => {
-        const message = data[0].message; // Récupère le message passé depuis le dispatch
-        const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
+$wire.on('show-message', (data) => {
+    const message = data[0].message; // Récupère le message passé depuis le dispatch
+    const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: type,
-            title: message
-        });
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
     });
+    Toast.fire({
+        icon: type,
+        title: message
+    });
+});
 </script>
 @endscript

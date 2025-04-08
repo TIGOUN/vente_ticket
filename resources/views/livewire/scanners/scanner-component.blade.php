@@ -42,7 +42,8 @@
                         </p>
 
                         <!-- <button type="button" class="my-2 btn btn-info">Marquer comme présent</button> -->
-                        <button type="button" class="my-2 btn btn-info" id="markPresentBtn" data-id="">Marquer comme présent</button>
+                        <button type="button" class="my-2 btn btn-info" id="markPresentBtn" data-id="">Marquer comme
+                            présent</button>
 
 
                     </div>
@@ -50,8 +51,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-
-
 
     <script src="{{ asset('assets/cam/instascan.min.js') }}"></script>
     <script src="{{ asset('assets/cam/jquery.min.js') }}"></script>
@@ -225,6 +224,4 @@
 
         });
     </script>
-</div>
-</div>
 </div>

@@ -5,9 +5,9 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="m-0 breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Layouts</a></li>
-                        <li class="breadcrumb-item active">Detached Sidenav</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Evernements</a></li>
+                        <li class="breadcrumb-item active">Liste des tickets</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Tickets</h4>
@@ -47,7 +47,8 @@
                             <label for="numberTicket" class="form-label">Nombre de tickets</label>
                             <input type="number" id="numberTicket" wire:model="numberTicket" min="0"
                                 class="form-control @error('numberTicket') is-invalid @enderror" required>
-                            @error('numberTicket') <span class="text-danger">{{ $error->has('numberTicket') }}</span> @enderror
+                            @error('numberTicket') <span class="text-danger">{{ $error->has('numberTicket') }}</span>
+                            @enderror
                         </div>
 
                         <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -64,14 +65,51 @@
                 <div class="card-body">
                     <div class="mb-2 row">
                         <div class="col-sm-12">
-                            Listes des cités
+                            Liste des tickets <span class="bg-success badge">{{ count($tickets) }}</span>
                         </div>
+                    </div>
+
+
+                    <div class="mb-3 row">
+                        <div class="col-md-3">
+                            <input wire:model.live="searchCode" type="text" class="form-control"
+                                placeholder="Recherche code ticket...">
+                        </div>
+
+                        <div class="col-md-2">
+                            <select wire:model.live="isUsed" class="form-select">
+                                <option value="">Scanné ?</option>
+                                <option value="1">Oui</option>
+                                <option value="0">Non</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select wire:model.live="isSelled" class="form-select">
+                                <option value="">Vendu ?</option>
+                                <option value="1">Oui</option>
+                                <option value="0">Non</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <input type="date" wire:model.live="creationDate" class="form-control">
+                        </div>
+
+                        <div class="col-md-3">
+                            <select wire:model="scannedBy" class="form-select">
+                                <option value="">Scanné par</option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
 
                     <div class="table-responsive">
                         @if (count($this->checked) > 0)
-                        <button type="button" wire:click="makeTicketHasPayed"
-                            class="me-1 btn btn-info btn-sm fs-6"><i
+                        <button type="button" wire:click="makeTicketHasPayed" class="me-1 btn btn-info btn-sm fs-6"><i
                                 class="mdi mdi-cash"></i>
                             Marquer vendu
                             @if ($this->checked > 1)
@@ -82,8 +120,7 @@
                         </button>
 
                         <button type="button" wire:click="generateCompileTickets"
-                            class="me-1 btn btn-info btn-sm fs-6"><i
-                                class="mdi mdi-cash"></i>
+                            class="me-1 btn btn-info btn-sm fs-6"><i class="mdi mdi-cash"></i>
                             Exporter en Pdf
                             @if ($this->checked > 1)
                             <strong>{{ count($this->checked) }} tickets</strong>
@@ -105,33 +142,30 @@
                                 <tr>
                                     <th>
                                         <div class="form-check">
-                                            <input type="checkbox" id="selectEmploye" wire:model.live="checkedPage" class="form-check-input" id="customCheck1">
+                                            <input type="checkbox" id="selectEmploye" wire:model.live="checkedPage"
+                                                class="form-check-input" id="customCheck1">
                                             <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                         </div>
                                     </th>
 
                                     <th>Code</th>
-                                    <th>QRCode</th>
+                                    <th>Ticket</th>
                                     <th>Présence</th>
                                     <th>Statut</th>
                                     <th>Payer électroniquement par</th>
                                     <th>Scanner par</th>
                                     <th>Générer par</th>
-                                    <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($tickets as $ticket)
-                                <tr wire:key="{{ $ticket->id }}" @if($this->isChecked($ticket->id)) class="table-primary" @endif>
+                                <tr wire:key="{{ $ticket->id }}" @if($this->isChecked($ticket->id))
+                                    class="table-primary" @endif>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox"
-                                                wire:model.live="checked"
-                                                id="customCheck2"
-                                                class="form-check-input"
-                                                value="{{ $ticket->id }}"
-                                                id="{{ $ticket->id }}"
-                                                @if($ticket->is_selled) disabled @endif
+                                            <input type="checkbox" wire:model.live="checked" id="customCheck2"
+                                                class="form-check-input" value="{{ $ticket->id }}"
+                                                id="{{ $ticket->id }}" @if($ticket->is_selled) disabled @endif
                                             >
                                             <label class="form-check-label" for="customCheck2">&nbsp;</label>
                                         </div>
@@ -195,9 +229,6 @@
                                         {{ $ticket->user->name }}
                                     </td>
 
-                                    <td>
-                                        -
-                                    </td>
                                 </tr>
                                 @endforeach
 

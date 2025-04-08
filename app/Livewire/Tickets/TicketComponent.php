@@ -4,6 +4,7 @@ namespace App\Livewire\Tickets;
 
 use App\Models\Events;
 use App\Models\Ticket;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,11 @@ class TicketComponent extends Component
     use WithPagination;
     public $showCreateTicketForm, $numberTicket, $eventId, $events, $message, $typeMessage;
     public $checked = [], $checkedPage = false, $checkedAll = false, $perPage = 5, $search;
+    public $scannedBy = '';
+    public $searchCode = '';
+    public $isUsed = '';
+    public $isSelled = '';
+    public $creationDate = null;
 
     public function showingCreateTicketComponent()
     {
@@ -190,10 +196,62 @@ class TicketComponent extends Component
         }
     }
 
+    // #[On('refresh-tickets-dataTable')]
+    // public function render()
+    // {
+    //     $tickets = Ticket::where('event_id', $this->eventId)->orderByDesc('code')->paginate(20);
+    //     return view('livewire.tickets.ticket-component', ['tickets' => $tickets]);
+    // }
+
+    public function updatingSearchCode()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingIsUsed()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingIsSelled()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCreationDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingScannedBy()
+    {
+        $this->resetPage();
+    }
+
     #[On('refresh-tickets-dataTable')]
     public function render()
     {
-        $tickets = Ticket::where('event_id', $this->eventId)->orderByDesc('code')->paginate(5);
-        return view('livewire.tickets.ticket-component', ['tickets' => $tickets]);
+        $query = Ticket::where('event_id', $this->eventId);
+
+        if ($this->searchCode) {
+            $query->where('code', 'like', '%' . $this->searchCode . '%');
+        }
+
+        if ($this->isUsed !== '') {
+            $query->where('is_used', $this->isUsed);
+        }
+
+        if ($this->isSelled !== '') {
+            $query->where('is_selled', $this->isSelled);
+        }
+
+        if ($this->creationDate) {
+            $query->whereDate('created_at', $this->creationDate);
+        }
+
+        $users = User::where('type_user','controller')->get();
+        $tickets = $query->orderByDesc('code')->paginate(20);
+
+        return view('livewire.tickets.ticket-component', compact('tickets','users'));
     }
 }

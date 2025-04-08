@@ -16,7 +16,8 @@ class EventComponent extends Component
 {
     use WithFileUploads;
     public $showCreateEventForm = false;
-
+    public string $search = '';
+    public ?string $date = null;
     public $eventId;
     public $code;
     public $name;
@@ -119,9 +120,38 @@ class EventComponent extends Component
         );
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDate()
+    {
+        $this->resetPage();
+    }
+
     #[On('refresh-events-dataTable')]
     public function render()
     {
-        return view('livewire.events.event-component', ['events' => Events::latest()->get()]);
+        // return view('livewire.events.event-component', ['events' => Events::latest()->get()]);
+        $query = Events::query();
+
+        if ($this->search) {
+            $query->where('name', 'like', '%' . $this->search . '%')
+                ->OrWhere('code', 'like', '%' . $this->search . '%')
+                ->OrWhere('location', 'like', '%' . $this->search . '%')
+                ->OrWhere('description', 'like', '%' . $this->search . '%')
+            ;
+        }
+
+        if ($this->date) {
+            $query->whereDate('start_date', $this->date)
+                ->OrWhereDate('end_date', $this->date)
+                ;
+        }
+
+        return view('livewire.events.event-component', [
+            'events' => $query->latest()->paginate(20)
+        ]);
     }
 }

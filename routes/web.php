@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/qr-code/scanners', function (Request $request) {
         $data = json_decode($request->input('content'), true); // Décoder le JSON reçu
+        // dd($data);
         $ticket = Ticket::find($data['id']); // Rechercher un ticket par ID
 
         if (!$ticket) {
