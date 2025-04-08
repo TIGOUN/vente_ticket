@@ -154,8 +154,6 @@
                     });
             });
 
-
-
             // Gérer le clic sur le bouton "Marquer comme présent"
             document.getElementById("markPresentBtn").addEventListener("click", function() {
                 let ticketId = this.getAttribute("data-id"); // Récupère l'ID du ticket
@@ -221,7 +219,6 @@
                 scanner.stop();
                 backCamera = null;
             });
-
         });
     </script>
 </div>

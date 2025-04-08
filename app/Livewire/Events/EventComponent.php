@@ -147,7 +147,7 @@ class EventComponent extends Component
         if ($this->date) {
             $query->whereDate('start_date', $this->date)
                 ->OrWhereDate('end_date', $this->date)
-                ;
+            ;
         }
 
         return view('livewire.events.event-component', [

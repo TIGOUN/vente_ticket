@@ -37,12 +37,12 @@ class Ticket extends Model
     // Sauvegarde automatique de la signature lors de la création du ticket
     public function generateQRCode()
     {
-        // $data = json_encode([
-        //     'id' => $this->id,
-        //     'signature' => $this->signature,
-        // ]);
+        $data = json_encode([
+            'id' => $this->id,
+            'signature' => $this->signature,
+        ]);
 
-        $data = $this->id;
+        // $data = $this->id;
 
         $writer = new PngWriter();
         $qrCode = QrCode::create($data)
