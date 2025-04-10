@@ -26,7 +26,7 @@ class TicketComponent extends Component
     public $searchCode = '';
     public $isUsed = '';
     public $isSelled = '';
-    public $creationDate = null;
+    public $creationDate = null, $selectedTicketId;
 
     public function showingCreateTicketComponent()
     {
@@ -118,75 +118,79 @@ class TicketComponent extends Component
     //     }
     // }
 
+    public function loadUpdateTicket($id)
+    {
+        $this->selectedTicketId = $id;
+        $this->dispatch('updated-tickets');
+    }
 
     public function generateCompileTickets()
-{
-    try {
-        if (!is_array($this->checked) || empty($this->checked)) {
-            $this->dispatch('show-message', [
-                'errorMessage' => 'Aucun ticket sélectionné.',
-                'typeMessage' => 'error',
-            ]);
-            return;
-        }
-
-        $tickets = Ticket::whereIn('id', $this->checked)->get();
-        $event = Events::findOrFail($this->eventId);
-
-        if ($tickets->isEmpty()) {
-            $this->dispatch('show-message', [
-                'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
-                'typeMessage' => 'error',
-            ]);
-            return;
-        }
-
-        $chunks = $tickets->chunk(5);
-        $pdfPaths = [];
-        $storagePath = storage_path('app/public/pdf_chunks');
-        if (!file_exists($storagePath)) {
-            mkdir($storagePath, 0777, true);
-        }
-
-        foreach ($chunks as $index => $chunk) {
-            $pdf = Pdf::loadView('pdfs.tickets_compile', [
-                'tickets' => $chunk,
-                'event' => $event
-            ])->setPaper('a4', 'portrait');
-
-            $fileName = "tickets_part_" . ($index + 1) . ".pdf";
-            $fullPath = $storagePath . '/' . $fileName;
-
-            file_put_contents($fullPath, $pdf->output());
-            $pdfPaths[] = $fullPath;
-        }
-
-        // Créer une archive ZIP
-        $zipPath = storage_path('app/public/tickets_bundle_' . time() . '.zip');
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
-            foreach ($pdfPaths as $file) {
-                $zip->addFile($file, basename($file));
+    {
+        try {
+            if (!is_array($this->checked) || empty($this->checked)) {
+                $this->dispatch('show-message', [
+                    'errorMessage' => 'Aucun ticket sélectionné.',
+                    'typeMessage' => 'error',
+                ]);
+                return;
             }
-            $zip->close();
+
+            $tickets = Ticket::whereIn('id', $this->checked)->orderByDesc('code')->get();
+            $event = Events::findOrFail($this->eventId);
+
+            if ($tickets->isEmpty()) {
+                $this->dispatch('show-message', [
+                    'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
+                    'typeMessage' => 'error',
+                ]);
+                return;
+            }
+
+            $chunks = $tickets->chunk(5);
+            $pdfPaths = [];
+            $storagePath = storage_path('app/public/pdf_chunks');
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0777, true);
+            }
+
+            foreach ($chunks as $index => $chunk) {
+                $pdf = Pdf::loadView('pdfs.tickets_compile', [
+                    'tickets' => $chunk,
+                    'event' => $event
+                ])->setPaper('a4', 'portrait');
+
+                $fileName = "tickets_part_" . $chunk->first()->code . "_to_" . $chunk->last()->code .".pdf";
+                $fullPath = $storagePath . '/' . $fileName;
+
+                file_put_contents($fullPath, $pdf->output());
+                $pdfPaths[] = $fullPath;
+            }
+
+            // Créer une archive ZIP
+            $zipPath = storage_path('app/public/tickets_bundle_' . time() . '.zip');
+            $zip = new ZipArchive();
+            if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+                foreach ($pdfPaths as $file) {
+                    $zip->addFile($file, basename($file));
+                }
+                $zip->close();
+            }
+
+            // Nettoyer les PDF temporaires
+            foreach ($pdfPaths as $file) {
+                unlink($file);
+            }
+
+            // Télécharger le fichier ZIP
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            $this->dispatch('show-message', [
+                'message' => 'Erreur lors de la génération des PDF.',
+                'typeMessage' => 'error',
+            ]);
         }
-
-        // Nettoyer les PDF temporaires
-        foreach ($pdfPaths as $file) {
-            unlink($file);
-        }
-
-        // Télécharger le fichier ZIP
-        return response()->download($zipPath)->deleteFileAfterSend(true);
-
-    } catch (Exception $e) {
-        Log::error($e->getMessage());
-        $this->dispatch('show-message', [
-            'message' => 'Erreur lors de la génération des PDF.',
-            'typeMessage' => 'error',
-        ]);
     }
-}
 
     public function updatedCheckedPage($value)
     {

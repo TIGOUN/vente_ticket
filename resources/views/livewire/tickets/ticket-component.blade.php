@@ -7,7 +7,7 @@
                     <ol class="m-0 breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Tableau de bord</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Evernements</a></li>
-                        <li class="breadcrumb-item active">Liste des tickets</li>
+                        <li class="active breadcrumb-item">Liste des tickets</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Tickets</h4>
@@ -216,9 +216,11 @@
                                         {{ $ticket->email }}
                                         {{ $ticket->user_paid_online_name }}
                                         @else
-                                        -
+                                        <button class="btn btn-sm btn-success"
+                                            wire:click="loadUpdateTicket('{{ $ticket->id }}')">
+                                            Envoyer
+                                        </button>
                                         @endif
-
                                     </td>
 
                                     <td>
@@ -240,10 +242,36 @@
             </div>
         </div>
     </div>
+
+
+    <div wire:ignore.self class="fade modal" id="scrollable-modal-update-tickets" tabindex="-1" role="dialog"
+        aria-labelledby="scrollableModalTitle1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scrollableModalTitle1">
+                        Envoyer le ticket electroniquement à :
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    @if ($this->selectedTicketId)
+                    @livewire(App\Livewire\Tickets\SendTicketModal::class, ['ticketId' => $this->selectedTicketId])
+                    @else
+                    <p>Pas de données chargées</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @script
 <script>
+    $wire.on('updated-tickets', () => {
+        $('#scrollable-modal-update-tickets').modal('show');
+    });
+
     $wire.on('show-message', (data) => {
         const message = data[0].message; // Récupère le message passé depuis le dispatch
         const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
