@@ -25,7 +25,7 @@
         }
 
         .ticket {
-            width: 95%;
+            width: 100%;
             height: 200px;
             /* Ajuste la taille du ticket */
         }
@@ -41,15 +41,23 @@
 
 
 <body>
-    @foreach($tickets as $ticket)
-    <div class="ticket-row" style="position: relative;">
-        <div class="qr-container" style="position: absolute; left: 25px; top: 87px; z-index: 1000;">
-            <img src="{{ storage_path('app/public/' . $ticket->qr_code) }}" alt="QR Code"
-                style="width: 100px; height: 100px;">
+    <!-- @foreach($tickets as $ticket)
+    <div class="ticket-row">
+        <div class="qr-container" style="position: absolute; margin-left: 27px; margin-top: 87px; z-index: 99999;">
+            <img src="{{ storage_path('app/public/' . $ticket->qr_code) }}" alt="QR Code" style="width: 80; height: 80;">
         </div>
-        <img src="{{ storage_path('app/public/' . $event->branding_image) }}" class="ticket" alt="Ticket">
+
+        <img style="position: relative;" src="{{ storage_path('app/public/' . $event->branding_image) }}" class="ticket" alt="Ticket">
     </div>
-    @endforeach
+    @endforeach -->
+
+
 </body>
+
+</html>
+
+</html>
+
+</html>
 
 </html>

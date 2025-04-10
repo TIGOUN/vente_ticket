@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <select wire:model="scannedBy" class="form-select">
+                            <select wire:model.live="scannedBy" class="form-select">
                                 <option value="">Scanné par</option>
                                 @foreach($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>

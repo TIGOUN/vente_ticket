@@ -14,6 +14,8 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class TicketComponent extends Component
 {
@@ -75,48 +77,116 @@ class TicketComponent extends Component
         }
     }
 
+    // public function generateCompileTickets()
+    // {
+    //     try {
+    //         // Vérifier si des tickets sont sélectionnés
+    //         if (!is_array($this->checked) || empty($this->checked)) {
+    //             $this->dispatch('show-message', [
+    //                 'errorMessage' => 'Aucun ticket sélectionné.',
+    //                 'typeMessage' => 'error',
+    //             ]);
+    //             return;
+    //         }
+
+    //         // Récupérer les tickets sélectionnés
+    //         $tickets = Ticket::whereIn('id', $this->checked)->get();
+    //         $event = Events::findOrFail($this->eventId);
+
+    //         if ($tickets->isEmpty()) {
+    //             $this->dispatch('show-message', [
+    //                 'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
+    //                 'typeMessage' => 'error',
+    //             ]);
+    //             return;
+    //         }
+
+    //         // Générer le PDF avec les tickets et leurs codes QR
+    //         $pdf = Pdf::loadView('pdfs.tickets_compile', compact('tickets', 'event'))
+    //             ->setPaper('a4', 'portrait');
+
+    //         // Télécharger le PDF
+    //         return response()->streamDownload(function () use ($pdf) {
+    //             echo $pdf->stream();
+    //         }, 'tickets_' . time() . '_' . now() . '.pdf');
+    //     } catch (Exception $e) {
+    //         Log::error($e->getMessage());
+    //         $this->dispatch('show-message', [
+    //             'message' => 'Erreur lors de la génération du PDF.',
+    //             'typeMessage' => 'error',
+    //         ]);
+    //     }
+    // }
+
 
     public function generateCompileTickets()
-    {
-        try {
-            // Vérifier si des tickets sont sélectionnés
-            if (!is_array($this->checked) || empty($this->checked)) {
-                $this->dispatch('show-message', [
-                    'errorMessage' => 'Aucun ticket sélectionné.',
-                    'typeMessage' => 'error',
-                ]);
-                return;
-            }
-
-            // Récupérer les tickets sélectionnés
-            $tickets = Ticket::whereIn('id', $this->checked)->get();
-            $event = Events::findOrFail($this->eventId);
-
-            if ($tickets->isEmpty()) {
-                $this->dispatch('show-message', [
-                    'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
-                    'typeMessage' => 'error',
-                ]);
-                return;
-            }
-
-            // Générer le PDF avec les tickets et leurs codes QR
-            $pdf = Pdf::loadView('pdfs.tickets_compile', compact('tickets', 'event'))
-                ->setPaper('a4', 'portrait');
-
-            // Télécharger le PDF
-            return response()->streamDownload(function () use ($pdf) {
-                echo $pdf->stream();
-            }, 'tickets_' . time() . '_' . now() . '.pdf');
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            dd($e->getMessage());
+{
+    try {
+        if (!is_array($this->checked) || empty($this->checked)) {
             $this->dispatch('show-message', [
-                'message' => 'Erreur lors de la génération du PDF.',
+                'errorMessage' => 'Aucun ticket sélectionné.',
                 'typeMessage' => 'error',
             ]);
+            return;
         }
+
+        $tickets = Ticket::whereIn('id', $this->checked)->get();
+        $event = Events::findOrFail($this->eventId);
+
+        if ($tickets->isEmpty()) {
+            $this->dispatch('show-message', [
+                'errorMessage' => 'Les tickets sélectionnés sont introuvables.',
+                'typeMessage' => 'error',
+            ]);
+            return;
+        }
+
+        $chunks = $tickets->chunk(5);
+        $pdfPaths = [];
+        $storagePath = storage_path('app/public/pdf_chunks');
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+
+        foreach ($chunks as $index => $chunk) {
+            $pdf = Pdf::loadView('pdfs.tickets_compile', [
+                'tickets' => $chunk,
+                'event' => $event
+            ])->setPaper('a4', 'portrait');
+
+            $fileName = "tickets_part_" . ($index + 1) . ".pdf";
+            $fullPath = $storagePath . '/' . $fileName;
+
+            file_put_contents($fullPath, $pdf->output());
+            $pdfPaths[] = $fullPath;
+        }
+
+        // Créer une archive ZIP
+        $zipPath = storage_path('app/public/tickets_bundle_' . time() . '.zip');
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+            foreach ($pdfPaths as $file) {
+                $zip->addFile($file, basename($file));
+            }
+            $zip->close();
+        }
+
+        // Nettoyer les PDF temporaires
+        foreach ($pdfPaths as $file) {
+            unlink($file);
+        }
+
+        // Télécharger le fichier ZIP
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+
+    } catch (Exception $e) {
+        Log::error($e->getMessage());
+        $this->dispatch('show-message', [
+            'message' => 'Erreur lors de la génération des PDF.',
+            'typeMessage' => 'error',
+        ]);
     }
+}
 
     public function updatedCheckedPage($value)
     {
@@ -245,13 +315,13 @@ class TicketComponent extends Component
             $query->where('is_selled', $this->isSelled);
         }
 
-        if ($this->creationDate) {
-            $query->whereDate('created_at', $this->creationDate);
+        if ($this->scannedBy) {
+            $query->where('scanner_id', $this->scannedBy);
         }
 
-        $users = User::where('type_user','controller')->get();
+        $users = User::where('type_user', 'controller')->get();
         $tickets = $query->orderByDesc('code')->paginate(20);
 
-        return view('livewire.tickets.ticket-component', compact('tickets','users'));
+        return view('livewire.tickets.ticket-component', compact('tickets', 'users'));
     }
 }
