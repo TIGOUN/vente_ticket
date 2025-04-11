@@ -159,7 +159,7 @@ class TicketComponent extends Component
                     'event' => $event
                 ])->setPaper('a4', 'portrait');
 
-                $fileName = "tickets_part_" . $chunk->first()->code . "_to_" . $chunk->last()->code .".pdf";
+                $fileName = "tickets_part_" . $chunk->first()->code . "_to_" . $chunk->last()->code . ".pdf";
                 $fullPath = $storagePath . '/' . $fileName;
 
                 file_put_contents($fullPath, $pdf->output());

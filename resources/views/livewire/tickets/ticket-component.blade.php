@@ -255,8 +255,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    @if ($this->selectedTicketId)
-                    @livewire(App\Livewire\Tickets\SendTicketModal::class, ['ticketId' => $this->selectedTicketId])
+                    @if ($selectedTicketId)
+                    @livewire(App\Livewire\Tickets\SendTicketModal::class, ['ticketId' => $selectedTicketId],
+                    key('show-' . $selectedTicketId))
                     @else
                     <p>Pas de données chargées</p>
                     @endif
@@ -270,6 +271,10 @@
 <script>
     $wire.on('updated-tickets', () => {
         $('#scrollable-modal-update-tickets').modal('show');
+    });
+
+    $wire.on('updated-tickets-close', () => {
+        $('#scrollable-modal-update-tickets').modal('hide');
     });
 
     $wire.on('show-message', (data) => {

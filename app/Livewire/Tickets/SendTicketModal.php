@@ -6,6 +6,7 @@ use App\Mail\SendTicketPdf;
 use App\Models\Ticket;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
@@ -34,6 +35,9 @@ class SendTicketModal extends Component
         try {
             $this->validate();
             $ticket = Ticket::findOrFail($this->ticketId);
+            $ticket->email = $this->email;
+            $ticket->user_paid_online_name = $this->name;
+            $ticket->save();
 
             $pdf = Pdf::loadView('pdfs.single_ticket', ['ticket' => $ticket])
                 ->setPaper('a4', 'portrait');
@@ -52,7 +56,7 @@ class SendTicketModal extends Component
             $pdfPath = $directory . '/' . $filename;
             file_put_contents($pdfPath, $pdf->output());
 
-            Mail::to($this->email)->send(new SendTicketPdf($this->name, $pdfPath));
+            Mail::to($this->email)->send(new SendTicketPdf($this->name, $pdfPath, $ticket->event));
 
             $this->dispatch('show-message', [
                 'message' => 'Le ticket a été envoyé avec succès !',
@@ -60,8 +64,14 @@ class SendTicketModal extends Component
             ]);
 
             $this->reset(['name', 'email', 'ticketId']);
+            $this->dispatch('updated-tickets-close');
         } catch (Exception $th) {
             dd($th->getMessage());
+            Log::error($th->getMessage());
+            $this->dispatch('show-message', [
+                'message' => 'L\'Opération a rencontré un problème !!!',
+                'typeMessage' => 'error',
+            ]);
         }
     }
 
