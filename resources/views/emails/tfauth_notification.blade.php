@@ -679,12 +679,69 @@
                         </tr>
                         <!-- // MODULE ROW -->
 
+
+
                     </table>
                     <!-- // END -->
 
 
                     <table bgcolor="#E1E1E1" border="0" cellpadding="0" cellspacing="0" width="500" id="emailFooter">
 
+                        <!-- MODULE ROW // -->
+                        <tr>
+                            <td align="center" valign="top">
+                                <!-- CENTERING TABLE // -->
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td align="center" valign="top">
+                                            <!-- FLEXIBLE CONTAINER // -->
+                                            <table border="0" cellpadding="0" cellspacing="0" width="500"
+                                                class="flexibleContainer">
+                                                <tr>
+                                                    <td align="center" valign="top" width="500"
+                                                        class="flexibleContainerCell">
+                                                        <table border="0" cellpadding="30" cellspacing="0" width="100%">
+                                                            <tr>
+                                                                <td align="center" valign="top">
+
+                                                                    <!-- CONTENT TABLE // -->
+                                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                                        width="100%">
+                                                                        <tr>
+                                                                            <td valign="top" class="textContent">
+                                                                                <div
+                                                                                    style="font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;margin-top:0px;color:#5F5F5F;line-height:135%;">
+
+                                                                                    <p
+                                                                                        style="margin-top:15px; margin-bottom: 15px;">
+                                                                                        Cordialement,
+                                                                                    </p>
+
+                                                                                    👥<b>BUREAU FAST-UAC</b>
+                                                                                    <br>
+                                                                                    📧 mail@fast.com
+                                                                                    <br>
+                                                                                    📞 +229 01 00 00 00 00
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <!-- // CONTENT TABLE -->
+
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- // FLEXIBLE CONTAINER -->
+                                        </td>
+                                    </tr>
+                                </table>
+                                <!-- // CENTERING TABLE -->
+                            </td>
+                        </tr>
+                        <!-- // MODULE ROW -->
 
                         <tr>
                             <td align="center" valign="top">
@@ -731,208 +788,3 @@
 </body>
 
 </html>
-<tr>
-    <td align="center" valign="top">
-        <!-- CENTERING TABLE // -->
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
-                <td align="center" valign="top">
-                    <!-- FLEXIBLE CONTAINER // -->
-                    <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                        <tr>
-                            <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                                <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                                    <tr>
-                                        <td valign="top" bgcolor="#E1E1E1">
-
-                                            <div
-                                                style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                                <div></div>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- // FLEXIBLE CONTAINER -->
-                </td>
-            </tr>
-        </table>
-        <!-- // CENTERING TABLE -->
-    </td>
-</tr>
-
-</table>
-<!-- // END -->
-
-</td>
-</tr>
-</table>
-</center>
-</body>
-
-</html>
-<!-- CENTERING TABLE // -->
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td align="center" valign="top">
-            <!-- FLEXIBLE CONTAINER // -->
-            <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                <tr>
-                    <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                        <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                            <tr>
-                                <td valign="top" bgcolor="#E1E1E1">
-
-                                    <div
-                                        style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                        <div></div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <!-- // FLEXIBLE CONTAINER -->
-        </td>
-    </tr>
-</table>
-<!-- // CENTERING TABLE -->
-</td>
-</tr>
-
-</table>
-<!-- // END -->
-
-</td>
-</tr>
-</table>
-</center>
-</body>
-
-</html>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td align="center" valign="top">
-            <!-- FLEXIBLE CONTAINER // -->
-            <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                <tr>
-                    <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                        <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                            <tr>
-                                <td valign="top" bgcolor="#E1E1E1">
-
-                                    <div
-                                        style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                        <div></div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <!-- // FLEXIBLE CONTAINER -->
-        </td>
-    </tr>
-</table>
-<!-- // CENTERING TABLE -->
-</td>
-</tr>
-
-</table>
-<!-- // END -->
-
-</td>
-</tr>
-</table>
-</center>
-</body>
-
-</html>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td align="center" valign="top">
-            <!-- FLEXIBLE CONTAINER // -->
-            <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                <tr>
-                    <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                        <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                            <tr>
-                                <td valign="top" bgcolor="#E1E1E1">
-
-                                    <div
-                                        style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                        <div></div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <!-- // FLEXIBLE CONTAINER -->
-        </td>
-    </tr>
-</table>
-<!-- // CENTERING TABLE -->
-</td>
-</tr>
-
-</table>
-<!-- // END -->
-
-</td>
-</tr>
-</table>
-</center>
-</body>
-
-</html>
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-        <td align="center" valign="top">
-            <!-- FLEXIBLE CONTAINER // -->
-            <table border="0" cellpadding="0" cellspacing="0" width="500" class="flexibleContainer">
-                <tr>
-                    <td align="center" valign="top" width="500" class="flexibleContainerCell">
-                        <table border="0" cellpadding="30" cellspacing="0" width="100%">
-                            <tr>
-                                <td valign="top" bgcolor="#E1E1E1">
-
-                                    <div
-                                        style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">
-                                        <div></div>
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <!-- // FLEXIBLE CONTAINER -->
-        </td>
-    </tr>
-</table>
-<!-- // CENTERING TABLE -->
-</td>
-</tr>
-
-</table>
-<!-- // END -->
-
-</td>
-</tr>
-</table>
-</center>
-</body>
-
-</html>
-

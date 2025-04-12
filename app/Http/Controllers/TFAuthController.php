@@ -37,9 +37,10 @@ class TFAuthController extends Controller
             $user->opt = NULL;
             $user->save();
             Session::put('user_2fa', Auth::user()->id);
-            return response()->json('200');
+            // return response()->json('200');
+            return redirect()->intended(route('dashboard', absolute: false));
         } else {
-            return response()->json(['error' => 'Le code saisi est incorrecte']);
+            return redirect()->back()->with('error', 'Le code saisi est incorrecte');
         }
     }
 

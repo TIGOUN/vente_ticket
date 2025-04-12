@@ -37,7 +37,6 @@
                         </div>
 
                         <div class="p-4 card-body">
-
                             <div class="m-auto w-75 text-center">
                                 <h4 class="mt-0 text-dark-50 text-center fw-bold">Vérifiez votre e-mail pour un code
                                 </h4>
@@ -109,7 +108,7 @@
                 code: code,
             },
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 if (data == 200) {
                     window.location.href = "{{ url('/dashboard') }}";
                 } else {
