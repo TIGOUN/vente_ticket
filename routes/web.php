@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScanController;
+use App\Http\Controllers\TFAuthController;
 use App\Livewire\Dashbords\StarterPage;
 use App\Livewire\Events\EventComponent;
 use App\Livewire\Scanners\ScannerComponent;
@@ -13,16 +14,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-Route::get('/dashboard', StarterPage::class)->middleware(['auth', 'verified'])->name('dashboard');
+// Auth::routes(['register' => false]);
+
+Route::get('/dashboard', StarterPage::class)->middleware(['auth', 'verified', 'tfauth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/events', EventComponent::class)->name('events');
     Route::get('/tickets/{eventId}', TicketComponent::class)->name('tickets');
     Route::get('/scanners', ScannerComponent::class)->name('scanners');
     Route::get('/users', UsersComponent::class)->name('users');
+
+    Route::get('/confirm-login', [TFAuthController::class, 'show'])->name('login.confirm');
+    Route::post('/confirm-login', [TFAuthController::class, 'postAuth'])->name('login.postAuth');
 
     Route::post('/qr-code/scanners', function (Request $request) {
         $data = json_decode($request->input('content'), true); // Décoder le JSON reçu
@@ -43,7 +49,6 @@ Route::middleware('auth')->group(function () {
             'scanned_by' => $ticket->user_scanner->name ?? '-',
         ]);
     });
-
 
     Route::post('/update/qr-code', function (Request $request) {
         $ticket = Ticket::find($request->ticket_id);
@@ -68,9 +73,7 @@ Route::middleware('auth')->group(function () {
             ]
         );
     });
-});
 
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
