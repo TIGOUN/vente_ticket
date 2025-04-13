@@ -20,12 +20,12 @@ class ScannerComponent extends Component
         $this->code = $ticket->code ?? "-";
         $this->ticketDate = $ticket->created_at ?? "-";
         $this->eventName = $ticket->event->name ?? "-";
-        dd($content);
+        // dd($content);
         // $this->js("alert('\ljkjkjkjknk\')");
         $this->dispatch('show-details-info');
     }
 
-    
+
 
     public function render()
     {

@@ -197,11 +197,11 @@ class TicketComponent extends Component
             ];
 
             Mail::to(Auth::user()->email)->send(new NotificationTicketDownloaded($data));
-
+            $this->checked = [];
             // Télécharger le fichier ZIP
             return response()->download($zipPath)->deleteFileAfterSend(true);
         } catch (Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Erreur lors de la génération des PDF.',
@@ -289,7 +289,7 @@ class TicketComponent extends Component
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
             DB::rollback();
-            dd($e->getMessage());
+            // dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Opérations échouée !!!',

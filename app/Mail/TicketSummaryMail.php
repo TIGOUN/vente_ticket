@@ -24,7 +24,7 @@ class TicketSummaryMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Récapitulatif des Tickets')
+        return $this->subject('Récapitulatifs des tickets')
             ->view('emails.tickets.ticket_summary');
-    }    
+    }
 }

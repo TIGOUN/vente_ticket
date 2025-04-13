@@ -60,7 +60,7 @@ class TFAuthController extends Controller
         try {
             $k =  Mail::to($user->email)->send(new TFAuthMail($data));
         } catch (\Throwable $ex) {
-            dd($ex->getMessage());
+            // dd($ex->getMessage());
             Log::error($ex->getMessage());
         }
     }

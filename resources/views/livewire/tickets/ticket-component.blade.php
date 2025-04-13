@@ -168,9 +168,9 @@
                                     <th>Ticket</th>
                                     <th>Présence</th>
                                     <th>Statut</th>
+                                    <th>Télécharger</th>
                                     <th>Payer</th>
                                     <th>Scanner par</th>
-                                    <th>Télécharger</th>
                                     <th>Générer par</th>
                                 </tr>
                             </thead>
@@ -229,6 +229,18 @@
                                     </td>
 
                                     <td>
+                                        @if ($ticket->is_download)
+                                        <span class="badge-outline-success badge">
+                                            Oui
+                                        </span>
+                                        @else
+                                        <span class="badge-outline-danger badge">
+                                            Non
+                                        </span>
+                                        @endif
+                                    </td>
+
+                                    <td>
                                         @if ($ticket->email && $ticket->user_paid_online_name)
                                         {{ $ticket->email }}
                                         {{ $ticket->user_paid_online_name }}
@@ -242,18 +254,6 @@
 
                                     <td>
                                         {{ $ticket?->user_scanner?->name ?? '-' }}
-                                    </td>
-
-                                    <td>
-                                        @if ($ticket->is_download)
-                                        <span class="badge-outline-success badge">
-                                            Oui
-                                        </span>
-                                        @else
-                                        <span class="badge-outline-danger badge">
-                                            Non
-                                        </span>
-                                        @endif
                                     </td>
 
                                     <td>
@@ -271,7 +271,6 @@
             </div>
         </div>
     </div>
-
 
     <div wire:ignore.self class="fade modal" id="scrollable-modal-update-tickets" tabindex="-1" role="dialog"
         aria-labelledby="scrollableModalTitle1" aria-hidden="true">

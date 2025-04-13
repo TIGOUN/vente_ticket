@@ -23,7 +23,7 @@ class NotificationTicketDownloaded extends Mailable
 
     public function build()
     {
-        return $this->subject('🎟️ Nouveau ticket générer : ' . $this->data['event_name'])
+        return $this->subject('🎟️ Nouveau ticket télécharger : ' . $this->data['event_name'])
             ->view('emails.tickets.ticket_download')
             ->with([
                 'event_name' => $this->data['event_name'],
