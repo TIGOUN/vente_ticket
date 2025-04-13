@@ -293,6 +293,11 @@
             </div>
         </div>
     </div>
+
+    @include('components.full-page', [
+    'wire_target' =>
+    'showingCreateTicketComponent,generateCompileTickets,loadUpdateTicket,makeTicketHasPayed,isSelled,creationDate,scannedBy,isDownload,createTicket,getRecapTickets'
+    ])
 </div>
 
 @script

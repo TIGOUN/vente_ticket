@@ -30,4 +30,7 @@
             <button type="button" class="btn btn-secondary" wire:click="$set('show', false)">Fermer</button>
         </div>
     </form>
+    @include('components.full-page', [
+    'wire_target' => 'send'
+    ])
 </div>

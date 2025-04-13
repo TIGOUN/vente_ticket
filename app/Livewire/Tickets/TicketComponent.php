@@ -289,7 +289,7 @@ class TicketComponent extends Component
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
             DB::rollback();
-            // dd($e->getMessage());
+            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Opérations échouée !!!',

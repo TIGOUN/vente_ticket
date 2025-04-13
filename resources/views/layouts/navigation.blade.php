@@ -5,7 +5,7 @@
          <a href="javascript: void(0);">
              <img src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="user-image" height="42"
                  class="shadow-sm rounded-circle">
-             <span class="leftbar-user-name">Dominic Keller</span>
+             <span class="leftbar-user-name">{{ Auth::user()->name }}</span>
          </a>
      </div>
 

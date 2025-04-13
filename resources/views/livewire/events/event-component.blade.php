@@ -228,30 +228,31 @@
         </div>
     </div>
 
-    <!-- Charger le composant full-page-loader -->
-    <!-- <x-loader :wireTarget="['showingCreateEventComponent','createEvent']" /> -->
+    @include('components.full-page', [
+    'wire_target' => 'send,date,showingCreateEventComponent,createEvent'
+    ])
 </div>
 @script
 <script>
-$wire.on('show-message', (data) => {
-    const message = data[0].message; // Récupère le message passé depuis le dispatch
-    const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
+    $wire.on('show-message', (data) => {
+        const message = data[0].message; // Récupère le message passé depuis le dispatch
+        const type = data[0].typeMessage; // Récupère le message passé depuis le dispatch
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 5000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: type,
+            title: message
+        });
     });
-    Toast.fire({
-        icon: type,
-        title: message
-    });
-});
 </script>
 @endscript
