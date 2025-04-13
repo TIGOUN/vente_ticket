@@ -52,7 +52,7 @@ class TicketComponent extends Component
     {
         return Ticket::where('event_id', $this->eventId)
             ->where('is_selled', 0)
-            ->where('is_download', 0)
+            // ->where('is_download', 0)
             ->get();
     }
 
@@ -187,8 +187,9 @@ class TicketComponent extends Component
             }
 
             // Mettre à jour la colonne is_download à 1 pour les tickets spécifiés
-            Ticket::whereIn('id', $tickets)
+            Ticket::whereIn('id', $this->checked)
                 ->update(['is_download' => 1]);
+
             $data = [
                 'first_code' => $tickets->first()->code,
                 'last_code' => $tickets->last()->code,
@@ -200,6 +201,7 @@ class TicketComponent extends Component
             // Télécharger le fichier ZIP
             return response()->download($zipPath)->deleteFileAfterSend(true);
         } catch (Exception $e) {
+            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Erreur lors de la génération des PDF.',
