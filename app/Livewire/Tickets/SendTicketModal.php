@@ -57,7 +57,7 @@ class SendTicketModal extends Component
 
             // $filename = 'ticket_' . $ticket->code . '.pdf';
             $pdfPath = $directory . '/' . $filename;
-            // file_put_contents($pdfPath, $pdf->output());
+            file_put_contents($pdfPath, $pdf->output());
 
             Mail::to($this->email)->send(new SendTicketPdf($this->name, $pdfPath, $ticket->event));
 
@@ -71,7 +71,7 @@ class SendTicketModal extends Component
             $this->dispatch('updated-tickets-close');
         } catch (Exception $th) {
             DB::rollback();
-            // dd($th->getMessage());
+            dd($th->getMessage());
             Log::error($th->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'L\'Opération a rencontré un problème !!!',
