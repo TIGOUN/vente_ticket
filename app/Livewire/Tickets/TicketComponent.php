@@ -267,11 +267,11 @@ class TicketComponent extends Component
                 $ticket->save();
             }
 
-            $tickets = Ticket::OrderByAsc('code')->limit($this->numberTicket)->get();
+            $tickets = Ticket::OrderByDesc('code')->limit($this->numberTicket)->get();
 
             $data = [
-                'first_code' => $tickets->first()->code,
-                'last_code' => $tickets->last()->code,
+                'first_code' => $tickets->last()->code,
+                'last_code' => $tickets->first()->code,
                 'event_name' => $tickets->first()->event->name
             ];
 
@@ -289,6 +289,7 @@ class TicketComponent extends Component
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
             DB::rollback();
+            dd($e->getMessage());
             Log::error($e->getMessage());
             $this->dispatch('show-message', [
                 'message' => 'Opérations échouée !!!',
