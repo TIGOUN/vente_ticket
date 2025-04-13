@@ -22,17 +22,16 @@ Route::get('/', function () {
 Route::get('/dashboard', StarterPage::class)->middleware(['auth', 'verified', 'tfauth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/events', EventComponent::class)->name('events');
-    Route::get('/tickets/{eventId}', TicketComponent::class)->name('tickets');
+    Route::get('/events', EventComponent::class)->middleware('isAdmin')->name('events');
+    Route::get('/tickets/{eventId}', TicketComponent::class)->middleware('isAdmin')->name('tickets');
     Route::get('/scanners', ScannerComponent::class)->name('scanners');
-    Route::get('/users', UsersComponent::class)->name('users');
+    Route::get('/users', UsersComponent::class)->middleware('isAdmin')->name('users');
 
     Route::get('/confirm-login', [TFAuthController::class, 'show'])->name('login.confirm');
     Route::post('/confirm-login', [TFAuthController::class, 'postAuth'])->name('login.postAuth');
 
     Route::post('/qr-code/scanners', function (Request $request) {
         $data = json_decode($request->input('content'), true); // Décoder le JSON reçu
-        // dd($data);
         $ticket = Ticket::find($data['id']); // Rechercher un ticket par ID
 
         if (!$ticket) {
