@@ -32,7 +32,7 @@ class TFAuthMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Connection Confirmation de code')
+        return $this->subject('Code de confirmation pour connexion')
             ->view('emails.tfauth_notification')
             ->with([
                 'name' => $this->user['name'],

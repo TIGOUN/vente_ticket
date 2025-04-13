@@ -565,8 +565,8 @@
                                                                             <td valign="top" class="textContent">
                                                                                 <div
                                                                                     style="text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:15px;margin-bottom:0;margin-top:3px;color:#5F5F5F;line-height:135%;">
-                                                                                    Votre code de confirmation se trouve
-                                                                                    ci-dessous - saisissez-le dans la
+                                                                                    Bienvenu {{ $name }}, votre code de confirmation se trouve
+                                                                                    ci-dessous. Saisissez-le dans la
                                                                                     fenêtre ouverte de votre navigateur
                                                                                     et
                                                                                     nous vous aiderons à vous connecter.
@@ -679,30 +679,22 @@
                         </tr>
                         <!-- // MODULE ROW -->
 
-
-
-                    </table>
-                    <!-- // END -->
-
-
-                    <table bgcolor="#E1E1E1" border="0" cellpadding="0" cellspacing="0" width="500" id="emailFooter">
-
                         <!-- MODULE ROW // -->
                         <tr>
-                            <td align="center" valign="top">
+                            <td align="" valign="top">
                                 <!-- CENTERING TABLE // -->
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                     <tr>
-                                        <td align="center" valign="top">
+                                        <td align="" valign="top">
                                             <!-- FLEXIBLE CONTAINER // -->
                                             <table border="0" cellpadding="0" cellspacing="0" width="500"
                                                 class="flexibleContainer">
                                                 <tr>
-                                                    <td align="center" valign="top" width="500"
+                                                    <td align="" valign="top" width="500"
                                                         class="flexibleContainerCell">
                                                         <table border="0" cellpadding="30" cellspacing="0" width="100%">
                                                             <tr>
-                                                                <td align="center" valign="top">
+                                                                <td align="" valign="top">
 
                                                                     <!-- CONTENT TABLE // -->
                                                                     <table border="0" cellpadding="0" cellspacing="0"
@@ -726,8 +718,6 @@
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                    <!-- // CONTENT TABLE -->
-
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -742,6 +732,14 @@
                             </td>
                         </tr>
                         <!-- // MODULE ROW -->
+
+                    </table>
+                    <!-- // END -->
+
+
+                    <table bgcolor="#E1E1E1" border="0" cellpadding="0" cellspacing="0" width="500" id="emailFooter">
+
+
 
                         <tr>
                             <td align="center" valign="top">

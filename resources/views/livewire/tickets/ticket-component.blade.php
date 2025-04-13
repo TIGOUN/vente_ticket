@@ -47,8 +47,11 @@
                             <label for="numberTicket" class="form-label">Nombre de tickets</label>
                             <input type="number" id="numberTicket" wire:model="numberTicket" min="0"
                                 class="form-control @error('numberTicket') is-invalid @enderror" required>
-                            @error('numberTicket') <span class="text-danger">{{ $error->has('numberTicket') }}</span>
-                            @enderror
+                            @if ($errors->has('numberTicket'))
+                            <div class="text-danger error-text">
+                                {{ $errors->first('numberTicket') }}
+                            </div>
+                            @endif
                         </div>
 
                         <button type="submit" class="btn btn-primary">Enregistrer</button>

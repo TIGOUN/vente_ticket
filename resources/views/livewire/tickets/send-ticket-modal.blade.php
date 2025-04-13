@@ -8,11 +8,21 @@
                 <label for="name" class="form-label">Nom</label>
                 <input type="text" wire:model="name" class="form-control">
                 @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+                @if ($errors->has('name'))
+                <div class="text-danger error-text">
+                    {{ $errors->first('name') }}
+                </div>
+                @endif
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" wire:model="email" class="form-control">
                 @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                @if ($errors->has('email'))
+                <div class="text-danger error-text">
+                    {{ $errors->first('email') }}
+                </div>
+                @endif
             </div>
         </div>
         <div class="modal-footer">

@@ -88,30 +88,12 @@
                         </a>
 
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="me-1 mdi mdi-account-edit"></i>
-                            <span>Settings</span>
-                        </a>
-
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="me-1 mdi mdi-lifebuoy"></i>
-                            <span>Support</span>
-                        </a>
-
-                        <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item notify-item">
-                            <i class="me-1 mdi-lock-outline mdi"></i>
-                            <span>Lock Screen</span>
-                        </a>
-
-                        <!-- item-->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <a wire:navigate href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 this.closest('form').submit();" class="dropdown-item notify-item">
                                 <i class="me-1 mdi mdi-logout"></i>
-                                <span>Logout</span>
+                                <span>Deconnexion</span>
                             </a>
                         </form>
 
@@ -150,13 +132,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                © Hyper - Coderthemes.com
+                                © Dev - TIGOUN Z. K. CYRILLE
                             </div>
                             <div class="col-md-6">
                                 <div class="d-md-block text-md-end footer-links d-none">
-                                    <a href="javascript: void(0);">About</a>
+                                    <a href="javascript: void(0);">A propos</a>
                                     <a href="javascript: void(0);">Support</a>
-                                    <a href="javascript: void(0);">Contact Us</a>
+                                    <a href="javascript: void(0);">Contactez-nous</a>
                                 </div>
                             </div>
                         </div>
