@@ -19,20 +19,20 @@
 </head>
 
 <body class="loading authentication-bg" data-layout-config='{"darkMode":false}'>
-    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+    <div class="pt-2 pt-sm-5 pb-4 pb-sm-5 account-pages">
         <div class="container">
-            <div class="row justify-content-center">
+            <div class="justify-content-center row">
                 <div class="col-xxl-4 col-lg-5">
                     <div class="card">
 
                         <!-- Logo -->
-                        <div class="card-header pt-4 pb-4 text-center bg-primary">
+                        <div class="bg-primary pt-4 pb-4 text-center card-header">
                             <a href="index.html">
                                 <span><img src="assets/images/logo.png" alt="" height="18"></span>
                             </a>
                         </div>
 
-                        <div class="card-body p-4">
+                        <div class="p-4 card-body">
 
                             {{ $slot }}
 
@@ -40,12 +40,12 @@
                     </div>
                     <!-- end card -->
 
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
+                    <!-- <div class="mt-3 row">
+                        <div class="text-center col-12">
                             <p class="text-muted">Don't have an account? <a href="pages-register.html"
-                                    class="text-muted ms-1"><b>Sign Up</b></a></p>
-                        </div> <!-- end col -->
-                    </div>
+                                    class="ms-1 text-muted"><b>Sign Up</b></a></p>
+                        </div>
+                    </div> -->
                     <!-- end row -->
 
                 </div> <!-- end col -->

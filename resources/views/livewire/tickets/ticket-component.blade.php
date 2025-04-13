@@ -67,16 +67,29 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-2 row">
-                        <div class="col-sm-12">
+                        <div class="text-start col-sm-6">
                             Liste des tickets <span class="bg-success badge">{{ count($tickets) }}</span>
+                        </div>
+                        <div class="text-end col-sm-6">
+                            <button class="btn-outline-primary btn" wire:click="getRecapTickets">
+                                Recapitulatif
+                            </button>
                         </div>
                     </div>
 
 
                     <div class="mb-3 row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input wire:model.live="searchCode" type="text" class="form-control"
                                 placeholder="Recherche code ticket...">
+                        </div>
+
+                        <div class="col-md-2">
+                            <select wire:model.live="isDownload" class="form-select">
+                                <option value="">Télécharger ?</option>
+                                <option value="1">Oui</option>
+                                <option value="0">Non</option>
+                            </select>
                         </div>
 
                         <div class="col-md-2">
@@ -99,7 +112,7 @@
                             <input type="date" wire:model.live="creationDate" class="form-control">
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <select wire:model.live="scannedBy" class="form-select">
                                 <option value="">Scanné par</option>
                                 @foreach($users as $user)
@@ -112,8 +125,8 @@
 
                     <div class="table-responsive">
                         @if (count($this->checked) > 0)
-                        <button type="button" wire:click="makeTicketHasPayed" class="me-1 btn btn-info btn-sm fs-6"><i
-                                class="mdi mdi-cash"></i>
+                        <button type="button" wire:click="makeTicketHasPayed"
+                            class="me-1 mt-2 mb-2 btn btn-info btn-sm fs-6"><i class="mdi mdi-cash"></i>
                             Marquer vendu
                             @if ($this->checked > 1)
                             <strong>{{ count($this->checked) }} tickets</strong>
@@ -123,7 +136,7 @@
                         </button>
 
                         <button type="button" wire:click="generateCompileTickets"
-                            class="me-1 btn btn-info btn-sm fs-6"><i class="mdi mdi-cash"></i>
+                            class="me-1 mt-2 mb-2 btn btn-info btn-sm fs-6"><i class="mdi mdi-cash"></i>
                             Exporter en Pdf
                             @if ($this->checked > 1)
                             <strong>{{ count($this->checked) }} tickets</strong>
@@ -155,8 +168,9 @@
                                     <th>Ticket</th>
                                     <th>Présence</th>
                                     <th>Statut</th>
-                                    <th>Payer électroniquement par</th>
+                                    <th>Payer</th>
                                     <th>Scanner par</th>
+                                    <th>Télécharger</th>
                                     <th>Générer par</th>
                                 </tr>
                             </thead>
@@ -228,6 +242,18 @@
 
                                     <td>
                                         {{ $ticket?->user_scanner?->name ?? '-' }}
+                                    </td>
+
+                                    <td>
+                                        @if ($ticket->is_download)
+                                        <span class="badge-outline-success badge">
+                                            Oui
+                                        </span>
+                                        @else
+                                        <span class="badge-outline-danger badge">
+                                            Non
+                                        </span>
+                                        @endif
                                     </td>
 
                                     <td>

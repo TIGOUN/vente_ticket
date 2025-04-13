@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('user_paid_online_name')->nullable();
             $table->boolean('is_selled')->default(false); // Indique si le ticket a été scanné
+            $table->boolean('is_download')->default(false); // Indique si le ticket a été téléchargé
             $table->boolean('is_used')->default(false); // Indique si le ticket a été scanné
             $table->unsignedBigInteger('user_id')->comment('Créateur du ticket');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

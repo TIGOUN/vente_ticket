@@ -11,10 +11,11 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class EventComponent extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
     public $showCreateEventForm = false;
     public string $search = '';
     public ?string $date = null;
@@ -51,20 +52,6 @@ class EventComponent extends Component
     public function mount($eventId = null)
     {
         $this->code = generateUniqueReference();
-        // if ($eventId) {
-        //     $event = Event::findOrFail($eventId);
-        //     $this->eventId = $event->id;
-        //     $this->name = $event->name;
-        //     $this->description = $event->description;
-        //     $this->start_date = $event->start_date->format('Y-m-d\TH:i');
-        //     $this->end_date = $event->end_date ? $event->end_date->format('Y-m-d\TH:i') : null;
-        //     $this->location = $event->location;
-        //     $this->total_tickets_expired = $event->total_tickets_expired;
-        //     $this->total_tickets_scanned = $event->total_tickets_scanned;
-        //     $this->total_tickets = $event->total_tickets;
-        //     $this->sold_tickets = $event->sold_tickets;
-        //     $this->branding_image_url = $event->branding_image;
-        // }
     }
 
 

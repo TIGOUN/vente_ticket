@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Tickets;
 
+use App\Mail\NotificationTicketDownloaded;
+use App\Mail\NotificationTicketGenerate;
+use App\Mail\TicketSummaryMail;
 use App\Models\Events;
 use App\Models\Ticket;
 use App\Models\User;
@@ -10,6 +13,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -25,7 +29,7 @@ class TicketComponent extends Component
     public $scannedBy = '';
     public $searchCode = '';
     public $isUsed = '';
-    public $isSelled = '';
+    public $isSelled = '', $isDownload = '';
     public $creationDate = null, $selectedTicketId;
 
     public function showingCreateTicketComponent()
@@ -48,6 +52,7 @@ class TicketComponent extends Component
     {
         return Ticket::where('event_id', $this->eventId)
             ->where('is_selled', 0)
+            ->where('is_download', 0)
             ->get();
     }
 
@@ -181,6 +186,17 @@ class TicketComponent extends Component
                 unlink($file);
             }
 
+            // Mettre à jour la colonne is_download à 1 pour les tickets spécifiés
+            Ticket::whereIn('id', $tickets)
+                ->update(['is_download' => 1]);
+            $data = [
+                'first_code' => $tickets->first()->code,
+                'last_code' => $tickets->last()->code,
+                'event_name' => $tickets->first()->event->name
+            ];
+
+            Mail::to(Auth::user()->email)->send(new NotificationTicketDownloaded($data));
+
             // Télécharger le fichier ZIP
             return response()->download($zipPath)->deleteFileAfterSend(true);
         } catch (Exception $e) {
@@ -249,7 +265,15 @@ class TicketComponent extends Component
                 $ticket->save();
             }
 
-            DB::commit();
+            $tickets = Ticket::OrderByAsc('code')->limit($this->numberTicket)->get();
+
+            $data = [
+                'first_code' => $tickets->first()->code,
+                'last_code' => $tickets->last()->code,
+                'event_name' => $tickets->first()->event->name
+            ];
+
+            Mail::to(Auth::user()->email)->send(new NotificationTicketGenerate($data));
 
             $this->showCreateTicketForm = false;
             $this->numberTicket = null;
@@ -258,6 +282,7 @@ class TicketComponent extends Component
                 'message' => 'Tickets créés avec succès!!!',
                 'typeMessage' => 'success',
             ]);
+            DB::commit();
 
             $this->dispatch('refresh-tickets-dataTable');
         } catch (Exception $e) {
@@ -302,6 +327,47 @@ class TicketComponent extends Component
         $this->resetPage();
     }
 
+    public function getRecapTickets()
+    {
+        $eventId = $this->eventId; // Ou n'importe quel ID d'événement
+        $event = Events::findOrFail($eventId);
+
+        // Total
+        $totalGenerated = Ticket::where('event_id', $eventId)->count();
+        $totalDownloaded = Ticket::where('event_id', $eventId)->where('is_download', true)->count();
+        $totalScanned = Ticket::where('event_id', $eventId)->where('is_used', true)->count();
+        $totalSold = Ticket::where('event_id', $eventId)->where('is_selled', true)->count();
+
+        // Scans par utilisateur
+        $scannedByUsers = Ticket::where('event_id', $eventId)
+            ->where('is_used', true)
+            ->whereNotNull('scanner_id')
+            ->with('scanner')
+            ->get()
+            ->groupBy('scanner_id')
+            ->mapWithKeys(function ($tickets, $scannerId) {
+                $name = optional($tickets->first()->scanner)->name ?? 'Inconnu';
+                return [$name => $tickets->count()];
+            });
+
+        $data = [
+            'event_name' => $event->name,
+            'total_generated' => $totalGenerated,
+            'total_downloaded' => $totalDownloaded,
+            'total_scanned' => $totalScanned,
+            'total_sold' => $totalSold,
+            'scanned_by_users' => $scannedByUsers
+        ];
+
+        // Envoi du mail à l’admin ou organisateur
+        Mail::to(Auth::user()->email)->send(new TicketSummaryMail($data));
+
+        $this->dispatch('show-message', [
+            'message' => 'Récapitulatif envoyé avec succès !!!',
+            'typeMessage' => 'success',
+        ]);
+    }
+
     #[On('refresh-tickets-dataTable')]
     public function render()
     {
@@ -321,6 +387,10 @@ class TicketComponent extends Component
 
         if ($this->scannedBy) {
             $query->where('scanner_id', $this->scannedBy);
+        }
+
+        if ($this->isDownload) {
+            $query->where('is_download', $this->isDownload);
         }
 
         $users = User::where('type_user', 'controller')->get();

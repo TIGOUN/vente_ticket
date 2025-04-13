@@ -1,8 +1,8 @@
 <x-guest-layout>
 
     <div class="m-auto w-75 text-center">
-        <er class="pb-0 text-dark-50 text-center fw-bold">Se connecter</er>
-        <mail class="mb-4 text-muted">Entrez votre email et mot de passe pour accéder au panneau d'administrateur.</ma>
+        <h4 class="pb-0 text-dark-50 text-center fw-bold">Se connecter</h4>
+        <p class="mb-4 text-muted">Entrez votre email et mot de passe pour accéder au panneau d'administrateur.</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}">
