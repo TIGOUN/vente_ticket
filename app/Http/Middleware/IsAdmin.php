@@ -16,9 +16,17 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->type_user === 'controller') {
-            return redirect()->route('login');
+        // Vérifier si l'utilisateur est authentifié
+        if (!Auth::check()) {
+            return redirect()->route('login');  // Ou toute autre redirection vers la page de connexion
         }
+
+        // Vérifier si l'utilisateur a le type 'controller'
+        if (Auth::user()->type_user === 'controller') {
+            // Retourner un 403 avec un message personnalisé
+            abort(403, 'Accès interdit. Vous ne pouvez pas accéder à cette ressource.');
+        }
+
         return $next($request);
     }
 }
