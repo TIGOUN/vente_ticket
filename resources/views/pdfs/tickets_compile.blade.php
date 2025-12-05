@@ -43,7 +43,7 @@
 <body>
     @foreach($tickets as $ticket)
     <div class="ticket-row" style="position: relative;">
-        <div class="qr-container" style="position: absolute; left: 25px; top: 87px; z-index: 1000;">
+        <div class="qr-container" style="position: absolute; left: 525px; top: 87px; z-index: 1000;">
             <img src="{{ storage_path('app/public/' . $ticket->qr_code) }}" alt="QR Code"
                 style="width: 100px; height: 100px;">
         </div>
