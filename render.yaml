@@ -1,12 +1,11 @@
 services:
   - type: web
     name: vente-ticket
-    runtime: php
+    runtime: docker
     plan: starter
     region: frankfurt
     branch: main
-    buildCommand: ./render-build.sh
-    startCommand: vendor/bin/heroku-php-apache2 public/
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /up
     autoDeploy: true
     disk:
@@ -19,6 +18,8 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_KEY
+        generateValue: true
+      - key: APP_QR_CODE_KEY
         generateValue: true
       - key: APP_URL
         sync: false
