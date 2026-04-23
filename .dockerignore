@@ -31,8 +31,6 @@ README.md
 DEPLOY_RENDER.md
 LICENSE
 
-Dockerfile
 .dockerignore
-docker-entrypoint.sh
 render.yaml
 render-build.sh
