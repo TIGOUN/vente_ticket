@@ -51,6 +51,7 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 
 RUN composer dump-autoload --optimize --no-dev \
+    && php artisan vendor:publish --provider="LaravelPWA\Providers\LaravelPWAServiceProvider" --force \
     && npm run build \
     && rm -rf node_modules \
     && chown -R www-data:www-data storage bootstrap/cache \
