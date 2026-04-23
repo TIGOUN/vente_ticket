@@ -183,7 +183,24 @@ php artisan tinker
 
 ---
 
-## 10. Checklist finale avant de pousser
+## 10. Compatibilité PostgreSQL
+
+L'application était initialement conçue pour SQLite (dev). Voici ce qui a été fait / vérifié pour PostgreSQL sur Render :
+
+- **Extension PHP `pdo_pgsql`** : ajoutée dans `composer.json` → installée automatiquement par le buildpack PHP de Render lors du `composer install --no-dev`.
+- **`config.platform`** dans `composer.json` : déclare les extensions `pdo_pgsql` et `gd` comme présentes côté Composer, pour que `composer update` fonctionne localement (où ces extensions ne sont pas installées sur la machine du dev qui utilise SQLite). Les vraies extensions sont bien installées sur Render.
+- **`Schema::defaultStringLength(191)`** : conditionné au driver `mysql` dans `AppServiceProvider` — inutile sur Postgres.
+- **UUID** (`events.id`, `tickets.id`) : fonctionnent en mode natif Postgres (`uuid` réel, plus efficace que `CHAR(36)` MySQL).
+- **`enum('type_user', ...)`** dans la table `users` : Laravel génère un `VARCHAR` + `CHECK` constraint sur Postgres. Fonctionne, mais toute modification future de cette colonne nécessitera `doctrine/dbal` ou une migration brute — à garder en tête.
+- **`unsignedBigInteger`** : devient `BIGINT` sur Postgres (pas de notion `unsigned`). Les foreign keys fonctionnent normalement.
+- **`LIKE` case-sensitive** (dans `app/Helpers/helper.php:42`) : Postgres est sensible à la casse, contrairement à MySQL/SQLite. Le pattern utilisé (`'TKT-FAST' . $anneeActuelle . '-%'`) et les codes générés en `strtoupper()` sont toujours en majuscules, donc compatible.
+- **Aucun `DB::raw` / `whereRaw`** dans l'app → pas de SQL spécifique à un dialecte.
+
+> Note dev local : si tu veux tester avec Postgres en local, installe `php8.2-pgsql` (ou version correspondant à ton PHP) et change `DB_CONNECTION=pgsql` dans `.env`.
+
+---
+
+## 11. Checklist finale avant de pousser
 
 - [x] Conflits de merge résolus (`.gitignore`, `README.md`)
 - [x] `APP_ENV=production` et `APP_DEBUG=false` dans les envs Render

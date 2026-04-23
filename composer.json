@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-pdo_pgsql": "*",
         "barryvdh/laravel-dompdf": "^3.1",
         "endroid/qr-code": "^5.0",
         "laravel/framework": "^11.31",
@@ -71,6 +72,10 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform": {
+            "ext-pdo_pgsql": "8.0",
+            "ext-gd": "8.0"
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
